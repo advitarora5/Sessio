@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const yearOptions = ["Freshman", "Sophomore", "Junior", "Senior", "Grad"];
+const roleOptions = ["Student", "Faculty", "Staff", "Grad Student", "Researcher"];
 
 export function SignUpForm({
   className,
@@ -28,8 +29,7 @@ export function SignUpForm({
   const [username, setUsername] = useState("");
   const [major, setMajor] = useState("");
   const [year, setYear] = useState("");
-  const [role] = useState("STUDENT");
-  const [studyFocus, setStudyFocus] = useState("");
+  const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -51,11 +51,10 @@ export function SignUpForm({
 
     const profilePayload = {
       full_name: fullName.trim(),
-      username: username.trim().toLowerCase(),
+      username: username.trim().toLowerCase().replace(/[^a-z0-9_]/g, ''),
       major: major.trim(),
       year,
       role,
-      study_focus: studyFocus.trim() || null,
     };
 
     try {
@@ -135,7 +134,7 @@ export function SignUpForm({
                       required
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      placeholder="advit_focus"
+                      placeholder="DuBistGutGenug67"
                     />
                   </div>
                 </div>
@@ -168,20 +167,22 @@ export function SignUpForm({
                     </select>
                   </div>
                 </div>
-                <div className="grid gap-4 sm:grid-cols-[160px_1fr]">
-                  <div className="grid gap-2">
-                    <Label htmlFor="role">Role</Label>
-                    <Input id="role" value={role} readOnly />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="study-focus">Study focus</Label>
-                    <Input
-                      id="study-focus"
-                      value={studyFocus}
-                      onChange={(e) => setStudyFocus(e.target.value)}
-                      placeholder="CS 225, research, MCAT..."
-                    />
-                  </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="role">Role</Label>
+                  <select
+                    id="role"
+                    required
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="focus-ring h-10 rounded-md border border-input bg-background px-3 text-sm"
+                  >
+                    <option value="">Select role</option>
+                    {roleOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </section>
 
