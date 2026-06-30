@@ -1,4 +1,7 @@
+import { SessioLogo } from "@/components/brand/SessioLogo";
+import { OpeningHero } from "@/components/marketing/OpeningHero";
 import {
+  ArrowUpRight,
   BarChart3,
   CheckCircle2,
   Clock3,
@@ -6,21 +9,9 @@ import {
   MapPinned,
   Star,
   TimerReset,
-  TrendingUp,
   Users,
 } from "lucide-react";
 import Link from "next/link";
-
-const videoSrc =
-  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4";
-
-const navLinks = [
-  { label: "Dashboard", href: "/dashboard" },
-  { label: "Spots", href: "/spots" },
-  { label: "Groups", href: "/groups" },
-  { label: "About", href: "#product" },
-  { label: "Contact", href: "mailto:hello@sessio.app" },
-];
 
 const kpis = [
   {
@@ -99,97 +90,23 @@ const recentSessions = [
 
 export default function Home() {
   return (
-    <main className="bg-[linear-gradient(180deg,#052e25_0%,#ecfdf5_19%,#ffffff_100%)] text-foreground">
-      <section className="hero-cinematic relative flex min-h-screen flex-col overflow-hidden bg-background text-foreground">
-        <video
-          className="absolute inset-0 z-0 h-full w-full object-cover"
-          autoPlay
-          loop
-          muted
-          playsInline
-          aria-hidden="true"
-        >
-          <source src={videoSrc} type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(0,0,0,0.38)_0%,rgba(0,0,0,0.16)_44%,rgba(0,0,0,0.52)_100%)]" />
-
-        <nav className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-6 sm:px-8">
-          <Link
-            href="/"
-            className="text-3xl tracking-normal text-foreground"
-            style={{ fontFamily: "var(--font-display)" }}
-            aria-label="Sessio home"
-          >
-            Sessio
-          </Link>
-
-          <div className="hidden items-center gap-8 md:flex">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          <Link
-            href="/session/new"
-            className="liquid-glass rounded-full px-5 py-2.5 text-sm text-foreground transition-transform hover:scale-[1.03] sm:px-6"
-          >
-            Start a session
-          </Link>
-        </nav>
-
-        <div className="relative z-10 flex flex-1 flex-col items-center px-6 pb-44 pt-24 text-center sm:pt-32 lg:pb-52">
-          <h1
-            className="animate-fade-rise max-w-7xl text-5xl font-normal leading-[0.95] tracking-normal sm:text-7xl md:text-8xl"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            Deep focus,{" "}
-            <em className="not-italic text-muted-foreground">mapped</em>{" "}
-            across your campus.
-          </h1>
-          <p className="animate-fade-rise-delay mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Sessio turns study sessions into cinematic blocks of focus with
-            maps, analytics, and classroom-style gold stars from friends.
-          </p>
-          <div className="animate-fade-rise-delay-2 mt-12 flex flex-col items-center gap-4">
-            <Link
-              href="/session/new"
-              className="liquid-glass rounded-full px-12 py-4 text-base text-foreground transition-transform hover:scale-[1.03] sm:px-14 sm:py-5"
-            >
-              Start a session
-            </Link>
-            <Link
-              href="/auth/sign-up"
-              className="rounded-full border border-white/20 bg-black/20 px-5 py-2 text-sm font-medium text-foreground/90 underline-offset-4 backdrop-blur-sm transition-colors hover:text-foreground hover:underline"
-            >
-              Create account
-            </Link>
-          </div>
-        </div>
-      </section>
+    <main className="bg-pageBg text-[#0F223A]">
+      <OpeningHero />
 
       <section
         id="product"
-        className="relative z-20 -mt-40 px-5 pb-20 sm:px-8 lg:pb-28"
+        className="bg-pageBg px-5 py-16 text-[#0F223A] sm:px-8 lg:py-24"
       >
-        <div className="mx-auto grid max-w-7xl gap-5 rounded-lg border border-emerald-100 bg-[linear-gradient(180deg,#f0fdf4_0%,#ffffff_34%,#ffffff_100%)] p-5 shadow-[0_20px_80px_rgba(6,78,59,0.14)] sm:p-8">
+        <div className="mx-auto grid max-w-7xl gap-5 rounded-2xl border border-borderSubtle bg-white p-5 shadow-[0_20px_80px_rgba(15,34,58,0.12)] sm:p-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-sm font-medium text-primary">Sessio dashboard</p>
-              <h2
-                className="mt-2 text-3xl font-normal text-emerald-950 sm:text-4xl"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
+              <SessioLogo variant="navy" tagline="Dashboard preview" />
+              <h2 className="mt-3 text-3xl font-semibold text-[#0F223A] sm:text-4xl">
                 See the week you actually showed up.
               </h2>
             </div>
-            <div className="flex items-center gap-3 rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-medium text-emerald-900">
-              <Flame className="h-4 w-4 fill-emerald-500 text-emerald-600" />
+            <div className="flex items-center gap-3 rounded-full border border-borderSubtle bg-white px-4 py-2 text-sm font-medium text-[#0F223A] shadow-sm">
+              <Flame className="h-4 w-4 fill-amber-400 text-amber-500" />
               4-day streak
             </div>
           </div>
@@ -200,23 +117,23 @@ export default function Home() {
               return (
                 <div
                   key={item.label}
-                  className="rounded-lg border border-border/70 bg-white p-6 shadow-[0_1px_6px_rgba(15,23,42,0.03)]"
+                  className="rounded-xl border border-borderSubtle/70 bg-white p-6 shadow-[0_1px_6px_rgba(15,23,42,0.04)]"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <p className="text-[13px] font-medium text-muted-foreground">
                         {item.label}
                       </p>
-                      <p className="mt-3 text-2xl font-semibold text-emerald-950">
+                      <p className="mt-3 text-2xl font-semibold text-[#0F223A]">
                         {item.value}
                       </p>
                     </div>
-                    <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-primary">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-[#0F223A]">
                       <Icon className="h-5 w-5" />
                     </span>
                   </div>
-                  <p className="mt-5 inline-flex items-center gap-1 text-xs font-medium text-emerald-700">
-                    <TrendingUp className="h-3.5 w-3.5" />
+                  <p className="mt-5 inline-flex items-center gap-1 text-xs font-medium text-green-600">
+                    <ArrowUpRight className="h-3.5 w-3.5" />
                     {item.delta}
                   </p>
                 </div>
@@ -224,23 +141,21 @@ export default function Home() {
             })}
           </div>
 
-          <div className="rounded-lg border border-border/70 bg-white p-6 shadow-[0_1px_6px_rgba(15,23,42,0.03)] sm:p-8">
+          <div className="rounded-xl border border-borderSubtle/70 bg-white p-6 shadow-[0_1px_6px_rgba(15,23,42,0.04)] sm:p-8">
             <div className="flex items-center justify-between gap-4">
-              <h3 className="text-xl font-semibold text-emerald-950">
+              <h3 className="text-xl font-semibold text-[#0F223A]">
                 Weekly Focus
               </h3>
-              <span className="text-sm text-muted-foreground">
-                Last 7 days
-              </span>
+              <span className="text-sm text-muted-foreground">Last 7 days</span>
             </div>
-            <div className="mt-8 flex h-64 items-end gap-3 border-b border-l border-border/70 px-2 pb-4 sm:gap-5">
+            <div className="mt-8 flex h-64 items-end gap-3 border-b border-l border-borderSubtle/70 px-2 pb-4 sm:gap-5">
               {weeklyBars.map((bar) => (
                 <div
                   key={bar.label}
                   className="flex h-full flex-1 flex-col justify-end gap-3"
                 >
                   <div
-                    className="rounded-t-lg bg-primary"
+                    className="rounded-t-lg bg-[#0F223A]"
                     style={{ height: bar.height }}
                   />
                   <span className="text-center text-xs text-muted-foreground">
@@ -252,24 +167,24 @@ export default function Home() {
           </div>
 
           <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_420px]">
-            <div className="rounded-lg border border-border/70 bg-white p-6 shadow-[0_1px_6px_rgba(15,23,42,0.03)] sm:p-8">
-              <h3 className="text-xl font-semibold text-emerald-950">
+            <div className="rounded-xl border border-borderSubtle/70 bg-white p-6 shadow-[0_1px_6px_rgba(15,23,42,0.04)] sm:p-8">
+              <h3 className="text-xl font-semibold text-[#0F223A]">
                 Focus by Spot
               </h3>
               <div className="mt-7 grid gap-5">
                 {spotScores.map((spot) => (
                   <div key={spot.name} className="grid gap-2">
                     <div className="flex items-center justify-between gap-3 text-sm">
-                      <span className="font-medium text-emerald-950">
+                      <span className="font-medium text-[#0F223A]">
                         {spot.name}
                       </span>
                       <span className="text-muted-foreground">
                         {spot.score}% goals hit
                       </span>
                     </div>
-                    <div className="h-3 overflow-hidden rounded-full bg-emerald-50">
+                    <div className="h-3 overflow-hidden rounded-full bg-slate-100">
                       <div
-                        className="h-full rounded-full bg-primary"
+                        className="h-full rounded-full bg-[#0F223A]"
                         style={{ width: `${spot.score}%` }}
                       />
                     </div>
@@ -278,22 +193,20 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-border/70 bg-white p-6 shadow-[0_1px_6px_rgba(15,23,42,0.03)] sm:p-8">
-              <h3 className="text-xl font-semibold text-emerald-950">
-                Top Spots
-              </h3>
+            <div className="rounded-xl border border-borderSubtle/70 bg-white p-6 shadow-[0_1px_6px_rgba(15,23,42,0.04)] sm:p-8">
+              <h3 className="text-xl font-semibold text-[#0F223A]">Top Spots</h3>
               <div className="mt-4 grid">
                 {topSpots.map((spot, index) => (
                   <div
                     key={spot.name}
-                    className="flex items-center justify-between gap-4 border-b border-border/70 py-4 last:border-b-0"
+                    className="flex items-center justify-between gap-4 border-b border-borderSubtle/70 py-4 last:border-b-0"
                   >
                     <div className="flex min-w-0 items-center gap-4">
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-sm font-semibold text-emerald-800">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-[#0F223A]">
                         {index + 1}
                       </span>
                       <div className="min-w-0">
-                        <p className="truncate font-medium text-emerald-950">
+                        <p className="truncate font-medium text-[#0F223A]">
                           {spot.name}
                         </p>
                         <p className="text-sm text-muted-foreground">
@@ -301,7 +214,7 @@ export default function Home() {
                         </p>
                       </div>
                     </div>
-                    <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800">
+                    <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-[#0F223A]">
                       {spot.score}
                     </span>
                   </div>
@@ -310,14 +223,14 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="rounded-lg border border-border/70 bg-white p-6 shadow-[0_1px_6px_rgba(15,23,42,0.03)] sm:p-8">
+          <div className="rounded-xl border border-borderSubtle/70 bg-white p-6 shadow-[0_1px_6px_rgba(15,23,42,0.04)] sm:p-8">
             <div className="flex items-center justify-between gap-4">
-              <h3 className="text-xl font-semibold text-emerald-950">
+              <h3 className="text-xl font-semibold text-[#0F223A]">
                 Recent Sessions
               </h3>
               <Link
                 href="/feed"
-                className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+                className="text-sm font-medium text-[#0F223A] underline-offset-4 hover:underline"
               >
                 View feed
               </Link>
@@ -326,14 +239,14 @@ export default function Home() {
               {recentSessions.map((session) => (
                 <div
                   key={session.title}
-                  className="flex flex-col gap-3 border-b border-border/70 py-4 last:border-b-0 sm:flex-row sm:items-center sm:justify-between"
+                  className="flex flex-col gap-3 border-b border-borderSubtle/70 py-4 last:border-b-0 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="flex min-w-0 items-center gap-4">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-sm font-semibold text-white">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#0F223A] text-sm font-semibold text-white">
                       SE
                     </span>
                     <div className="min-w-0">
-                      <p className="truncate font-semibold text-emerald-950">
+                      <p className="truncate font-semibold text-[#0F223A]">
                         {session.title}
                       </p>
                       <p className="mt-1 text-sm text-muted-foreground">
@@ -343,11 +256,11 @@ export default function Home() {
                   </div>
                   <div className="flex flex-wrap items-center gap-2 sm:justify-end">
                     {session.dnd ? (
-                      <span className="rounded-full border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground">
+                      <span className="rounded-full border border-borderSubtle px-2.5 py-1 text-xs font-medium text-muted-foreground">
                         DND
                       </span>
                     ) : null}
-                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-[#0F223A]">
                       <CheckCircle2 className="h-3 w-3" />
                       {session.score}
                     </span>
@@ -364,10 +277,10 @@ export default function Home() {
           <div className="grid gap-4 md:grid-cols-3" id="contact">
             <Link
               href="/spots"
-              className="focus-ring rounded-lg border border-emerald-100 bg-emerald-50 p-5 transition hover:border-primary"
+              className="focus-ring rounded-xl border border-borderSubtle bg-slate-50 p-5 transition hover:border-[#0F223A]"
             >
-              <MapPinned className="h-5 w-5 text-primary" />
-              <p className="mt-3 font-semibold text-emerald-950">
+              <MapPinned className="h-5 w-5 text-[#0F223A]" />
+              <p className="mt-3 font-semibold text-[#0F223A]">
                 Map study spots
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
@@ -376,10 +289,10 @@ export default function Home() {
             </Link>
             <Link
               href="/groups"
-              className="focus-ring rounded-lg border border-emerald-100 bg-emerald-50 p-5 transition hover:border-primary"
+              className="focus-ring rounded-xl border border-borderSubtle bg-slate-50 p-5 transition hover:border-[#0F223A]"
             >
-              <Users className="h-5 w-5 text-primary" />
-              <p className="mt-3 font-semibold text-emerald-950">
+              <Users className="h-5 w-5 text-[#0F223A]" />
+              <p className="mt-3 font-semibold text-[#0F223A]">
                 Stay accountable
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
@@ -388,10 +301,10 @@ export default function Home() {
             </Link>
             <Link
               href="/auth/sign-up"
-              className="focus-ring rounded-lg border border-emerald-100 bg-emerald-50 p-5 transition hover:border-primary"
+              className="focus-ring rounded-xl border border-borderSubtle bg-slate-50 p-5 transition hover:border-[#0F223A]"
             >
-              <Flame className="h-5 w-5 text-primary" />
-              <p className="mt-3 font-semibold text-emerald-950">
+              <Flame className="h-5 w-5 text-[#0F223A]" />
+              <p className="mt-3 font-semibold text-[#0F223A]">
                 Start your streak
               </p>
               <p className="mt-1 text-sm text-muted-foreground">

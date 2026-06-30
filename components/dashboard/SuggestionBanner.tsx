@@ -19,7 +19,7 @@ export function SuggestionBanner({
         <div className="flex gap-3">
           <Sparkles className="mt-1 h-5 w-5 shrink-0 text-primary" />
           <div>
-            <h2 className="font-heading text-lg font-semibold">{title}</h2>
+            <h2 className="text-lg font-semibold">{title}</h2>
             <p className="mt-1 text-sm text-muted-foreground">{detail}</p>
           </div>
         </div>

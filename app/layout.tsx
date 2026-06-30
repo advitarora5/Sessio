@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Instrument_Serif, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   description:
     "Log deep work sessions, map study spots, and stay accountable with friends.",
   icons: {
-    icon: "/images/sessio-logo-mark.png",
-    apple: "/images/sessio-logo-mark.png",
+    icon: "/images/sessio-logo.png",
+    apple: "/images/sessio-logo.png",
   },
 };
 
@@ -24,13 +24,6 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
-  display: "swap",
-  subsets: ["latin"],
-  weight: "400",
-});
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,7 +31,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${instrumentSerif.variable} font-sans antialiased`}>
+      <body
+        className={`${inter.variable} min-h-screen bg-background font-sans text-foreground antialiased`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

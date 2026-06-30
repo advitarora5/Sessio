@@ -129,7 +129,7 @@ export function SpotExplorer({ spots }: SpotExplorerProps) {
                     key={spot.id}
                     type="button"
                     onClick={() => selectSpot(spot.id)}
-                    className="focus-ring rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm text-emerald-900 transition hover:border-emerald-500"
+                    className="focus-ring rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm text-[#0F223A] transition hover:border-primary"
                   >
                     {spot.name}
                   </button>
@@ -142,9 +142,9 @@ export function SpotExplorer({ spots }: SpotExplorerProps) {
             )}
           </div>
 
-          <div className="rounded-lg border border-emerald-100 bg-emerald-50 px-4 py-3">
-            <p className="text-sm font-medium text-emerald-950">Study heat</p>
-            <p className="mt-1 text-sm text-emerald-900/75">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
+            <p className="text-sm font-medium text-[#0F223A]">Study heat</p>
+            <p className="mt-1 text-sm text-slate-600">
               {filteredSpots.length} matches, {maxSessions} sessions at the
               hottest spot this week.
             </p>
@@ -163,8 +163,8 @@ export function SpotExplorer({ spots }: SpotExplorerProps) {
           </div>
           <MapPin className="hidden h-5 w-5 text-primary sm:block" />
         </div>
-        <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-emerald-100 bg-[linear-gradient(135deg,#f0fdf4_0%,#ffffff_48%,#dcfce7_100%)]">
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,185,129,0.08)_1px,transparent_1px),linear-gradient(0deg,rgba(16,185,129,0.08)_1px,transparent_1px)] bg-[size:48px_48px]" />
+        <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-slate-200 bg-[linear-gradient(135deg,#F8FAFC_0%,#FFFFFF_48%,#E8EEF5_100%)]">
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,34,58,0.08)_1px,transparent_1px),linear-gradient(0deg,rgba(15,34,58,0.08)_1px,transparent_1px)] bg-[size:48px_48px]" />
           {mappedSpots.map((spot) => {
             const heat = maxSessions > 0 ? spot.sessionsLastWeek / maxSessions : 0;
             const minuteHeat = maxMinutes > 0 ? spot.totalMinutes / maxMinutes : 0;
@@ -179,7 +179,7 @@ export function SpotExplorer({ spots }: SpotExplorerProps) {
                 aria-label={`Highlight ${spot.name}`}
                 onClick={() => selectSpot(spot.id)}
                 className={cn(
-                  "focus-ring absolute -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_6px_18px_rgba(5,150,105,0.25)] transition hover:scale-110",
+                  "focus-ring absolute -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_6px_18px_rgba(15,34,58,0.25)] transition hover:scale-110",
                   isHighlighted && "ring-4 ring-amber-300",
                 )}
                 style={{
@@ -187,7 +187,7 @@ export function SpotExplorer({ spots }: SpotExplorerProps) {
                   top: `${spot.y}%`,
                   width: `${size}px`,
                   height: `${size}px`,
-                  backgroundColor: `rgba(5, ${Math.round(118 + heat * 80)}, ${Math.round(76 + heat * 48)}, ${0.32 + heat * 0.58})`,
+                  backgroundColor: `rgba(15, ${Math.round(34 + heat * 48)}, ${Math.round(58 + heat * 112)}, ${0.32 + heat * 0.58})`,
                 }}
               />
             );

@@ -150,7 +150,7 @@ export function ProfileForm({ userId, profile }: ProfileFormProps) {
                 id="year"
                 value={year}
                 onChange={(event) => setYear(event.target.value)}
-                className="focus-ring h-9 rounded-md border border-input bg-background px-3 text-sm"
+                className="focus-ring h-9 rounded-md border border-input bg-white px-3 text-sm text-card-foreground"
               >
                 <option value="">Select year</option>
                 <option value="Freshman">Freshman</option>

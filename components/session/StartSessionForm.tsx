@@ -183,7 +183,7 @@ export function StartSessionForm({
               id="spot"
               value={spotId}
               onChange={(event) => setSpotId(event.target.value)}
-              className="focus-ring h-10 rounded-md border border-input bg-background px-3 text-sm"
+              className="focus-ring h-10 rounded-md border border-input bg-white px-3 text-sm text-card-foreground"
             >
               {spots.map((spot) => (
                 <option key={spot.id} value={spot.id}>
@@ -214,7 +214,7 @@ export function StartSessionForm({
               onChange={(event) =>
                 setVisibility(event.target.value as Tables<"sessions">["visibility"])
               }
-              className="focus-ring h-10 rounded-md border border-input bg-background px-3 text-sm"
+              className="focus-ring h-10 rounded-md border border-input bg-white px-3 text-sm text-card-foreground"
             >
               <option value="private">Private</option>
               <option value="group">Group</option>
@@ -246,7 +246,7 @@ export function StartSessionForm({
                 id="group"
                 value={groupId}
                 onChange={(event) => setGroupId(event.target.value)}
-                className="focus-ring h-10 rounded-md border border-input bg-background px-3 text-sm"
+                className="focus-ring h-10 rounded-md border border-input bg-white px-3 text-sm text-card-foreground"
               >
                 {groups.map((group) => (
                   <option key={group.id} value={group.id}>
@@ -265,7 +265,7 @@ export function StartSessionForm({
               value={notes}
               onChange={(event) => setNotes(event.target.value)}
               placeholder="What would make this session a win?"
-              className="focus-ring rounded-md border border-input bg-background px-3 py-2 text-sm"
+              className="focus-ring rounded-md border border-input bg-white px-3 py-2 text-sm text-card-foreground"
             />
           </div>
 

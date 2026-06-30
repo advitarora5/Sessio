@@ -16,10 +16,10 @@ const sizeClasses = {
 };
 
 const avatarColors = [
-  "bg-emerald-700",
-  "bg-teal-700",
-  "bg-lime-700",
-  "bg-green-800",
+  "bg-[#0F223A]",
+  "bg-slate-700",
+  "bg-blue-900",
+  "bg-indigo-900",
   "bg-cyan-700",
   "bg-slate-700",
 ];
