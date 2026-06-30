@@ -139,11 +139,14 @@ Three-column grid on xl (300px / 1fr / 320px), stacks on smaller screens:
 - Right: Challenges (10-hour week + 7-day streak progress), Your clubs (groups), Suggested friends (Follow -> friend request).
 StravaFeed (components/dashboard/StravaFeed.tsx) is a client component: framer-motion entrance/hover, a metrics row (focus time / goals hit / study spot), and social actions (gold star toggle, comment, share).
 
-8.6 Hero + SVG scroll animation
-The opening screen (components/marketing/OpeningHero.tsx) pairs the fullscreen video background with framer-motion entrance (fade-rise) and the Skiper19 scroll-follow stroke (components/ui/svg-follow-scroll.tsx) as the desktop right column. The animation responds to page scroll and is no longer buried in the dashboard.
+8.6 Hero + scroll-morph preview
+- The opening hero (components/marketing/OpeningHero.tsx) is text-dominant: fullscreen video background, framer-motion fade-rise entrance, a centered headline, and two equal-size CTAs (Start a session / Create account). No side card splits attention.
+- The "A week of Sessio" preview (components/marketing/DashboardPreviewHero.tsx) is where motion + imagery live: animated KPI cards on the left and the scroll-morph showcase (components/ui/scroll-morph-hero.tsx, IntroAnimation) on the right.
+- IntroAnimation is a self-contained client component with its OWN internal scroll container (works in a fixed-height frame and the /demo route). framer-motion useScroll + useSpring drive a 3D grid of FlipCards that flip/scale/parallax to reveal the Higgsfield imagery as the visitor scrolls. AnimationPhase = "grid" | "morph" | "reveal".
 
 8.7 Higgsfield asset conventions
 Higgsfield MCP is used for IMAGE/VIDEO ASSETS ONLY (never code/layout generation).
-- Store generated assets in /public/assets/higgsfield/.
-- Keep prompts on-brand: deep navy #0F223A primary, soft gray accents, small amber highlights, clean white background, flat vector, no text.
-- Example in use: feed-empty-state.png (FeedEmptyState). Preflight cost with get_cost before generating; poll job_status with sync:true.
+- Store generated assets in /public/assets/higgsfield/ and reference them with next/image (local paths need no remote host config).
+- Keep prompts on-brand: deep navy #0F223A primary, soft gray accents, small amber highlights, clean background, no text.
+- In use: feed-empty-state.png (FeedEmptyState); preview-dashboard.png, preview-map.png, preview-session.png (IntroAnimation morph tiles).
+- Workflow: preflight with get_cost:true, generate_image, then poll job_status with sync:true and download the rawUrl into /public/assets/higgsfield/.
