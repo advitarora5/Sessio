@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { MapPin, Search, X } from "lucide-react";
 import { useMemo, useState } from "react";
+import FacilityMap from "@/components/spots/FacilityMap";
 
 export type SpotExplorerSpot = {
   id: number;
@@ -16,6 +17,7 @@ export type SpotExplorerSpot = {
   tags: string[] | null;
   sessionsLastWeek: number;
   totalMinutes: number;
+  activeSessions: number;
 };
 
 type SpotExplorerProps = {
@@ -152,46 +154,22 @@ export function SpotExplorer({ spots }: SpotExplorerProps) {
         </div>
       </section>
 
-      <section className="rounded-lg border border-border bg-white p-5 shadow-[0_1px_6px_rgba(15,23,42,0.03)]">
+      <section className="rounded-lg border border-border bg-white p-5 shadow-[0_1px_6px_rgba(15,23,42,0.03)] overflow-hidden">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-xl font-semibold">Study heatmap</h2>
+            <h2 className="text-xl font-semibold">Interactive 3D Study Map</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Circle size reflects total focused minutes; color reflects recent
-              completed sessions.
+              Pulsing markers show active studiers right now. Color intensity reflects weekly focus sessions.
             </p>
           </div>
           <MapPin className="hidden h-5 w-5 text-primary sm:block" />
         </div>
-        <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-slate-200 bg-[linear-gradient(135deg,#F8FAFC_0%,#FFFFFF_48%,#E8EEF5_100%)]">
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,34,58,0.08)_1px,transparent_1px),linear-gradient(0deg,rgba(15,34,58,0.08)_1px,transparent_1px)] bg-[size:48px_48px]" />
-          {mappedSpots.map((spot) => {
-            const heat = maxSessions > 0 ? spot.sessionsLastWeek / maxSessions : 0;
-            const minuteHeat = maxMinutes > 0 ? spot.totalMinutes / maxMinutes : 0;
-            const size = 16 + minuteHeat * 34;
-            const isHighlighted = highlightedId === spot.id;
-
-            return (
-              <button
-                key={spot.id}
-                type="button"
-                title={spot.name}
-                aria-label={`Highlight ${spot.name}`}
-                onClick={() => selectSpot(spot.id)}
-                className={cn(
-                  "focus-ring absolute -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_6px_18px_rgba(15,34,58,0.25)] transition hover:scale-110",
-                  isHighlighted && "ring-4 ring-amber-300",
-                )}
-                style={{
-                  left: `${spot.x}%`,
-                  top: `${spot.y}%`,
-                  width: `${size}px`,
-                  height: `${size}px`,
-                  backgroundColor: `rgba(15, ${Math.round(34 + heat * 48)}, ${Math.round(58 + heat * 112)}, ${0.32 + heat * 0.58})`,
-                }}
-              />
-            );
-          })}
+        <div className="overflow-hidden rounded-lg border border-emerald-100 h-[450px]">
+          <FacilityMap
+            spots={filteredSpots}
+            highlightedId={highlightedId}
+            onSpotClick={selectSpot}
+          />
         </div>
       </section>
 

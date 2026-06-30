@@ -1,7 +1,6 @@
 "use client";
 
 import { SessioLogo } from "@/components/brand/SessioLogo";
-import { Skiper19 } from "@/components/ui/svg-follow-scroll";
 import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
 
@@ -40,7 +39,7 @@ export function OpeningHero() {
       >
         <source src={videoSrc} type="video/mp4" />
       </video>
-      <div className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(15,34,58,0.55)_0%,rgba(15,34,58,0.28)_42%,rgba(15,34,58,0.78)_100%)]" />
+      <div className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(15,34,58,0.58)_0%,rgba(15,34,58,0.30)_45%,rgba(15,34,58,0.80)_100%)]" />
 
       <nav className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-6 sm:px-8">
         <Link href="/" className="focus-ring rounded-lg" aria-label="Sessio home">
@@ -61,72 +60,83 @@ export function OpeningHero() {
 
         <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
           <Link
-            href="/session/new"
+            href="/auth/sign-up"
             className="liquid-glass rounded-full px-5 py-2.5 text-sm text-white transition-transform sm:px-6"
           >
-            Start a session
+            Create account
           </Link>
         </motion.div>
       </nav>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col items-center gap-12 px-6 py-12 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:py-16">
-        <div className="max-w-2xl text-center lg:text-left">
+      <div className="relative z-10 flex flex-1 items-center">
+        <div className="mx-auto w-full max-w-6xl px-6 text-center">
           <motion.h1
             custom={0}
             variants={fadeRise}
             initial="hidden"
             animate="show"
-            className="text-5xl font-semibold leading-[1.04] tracking-tight sm:text-6xl md:text-7xl"
+            className="mx-auto max-w-5xl text-5xl font-semibold leading-[1.03] tracking-tight sm:text-7xl md:text-8xl"
           >
             Deep focus,{" "}
             <span className="text-slate-300">mapped</span> across your campus.
           </motion.h1>
+
           <motion.p
             custom={1}
             variants={fadeRise}
             initial="hidden"
             animate="show"
-            className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-slate-200 sm:text-lg lg:mx-0"
+            className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-200 sm:text-lg"
           >
             Sessio turns study sessions into cinematic blocks of focus with maps,
             analytics, and classroom-style gold stars from friends.
           </motion.p>
+
           <motion.div
             custom={2}
             variants={fadeRise}
             initial="hidden"
             animate="show"
-            className="mt-10 flex flex-col items-center gap-4 sm:flex-row lg:items-start"
+            className="mt-10 flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:items-center"
           >
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full sm:w-auto"
+            >
               <Link
                 href="/session/new"
-                className="liquid-glass inline-flex rounded-full px-10 py-4 text-base text-white transition-transform sm:px-12"
+                className="inline-flex h-14 w-full items-center justify-center rounded-full bg-white px-10 text-base font-semibold text-[#0F223A] shadow-lg transition-colors hover:bg-slate-100 sm:w-auto"
               >
                 Start a session
               </Link>
             </motion.div>
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full sm:w-auto"
+            >
               <Link
                 href="/auth/sign-up"
-                className="inline-flex rounded-full border border-white/25 bg-white/5 px-6 py-3 text-sm font-medium text-white/90 backdrop-blur-sm transition-colors hover:bg-white/10 hover:text-white"
+                className="inline-flex h-14 w-full items-center justify-center rounded-full border border-white/40 bg-white/5 px-10 text-base font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/15 sm:w-auto"
               >
                 Create account
               </Link>
             </motion.div>
           </motion.div>
         </div>
-
-        <motion.div
-          custom={3}
-          variants={fadeRise}
-          initial="hidden"
-          animate="show"
-          className="w-full max-w-md lg:max-w-lg"
-        >
-          <Skiper19 />
-        </motion.div>
       </div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 0.8 }}
+        className="relative z-10 mb-8 flex justify-center"
+      >
+        <span className="text-xs font-medium uppercase tracking-[0.2em] text-slate-300">
+          Scroll to see your week
+        </span>
+      </motion.div>
     </section>
   );
 }
