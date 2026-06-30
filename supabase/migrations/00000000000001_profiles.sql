@@ -1,0 +1,13 @@
+-- Migration: profiles
+-- Description: User profile table linked to auth.users
+-- Docs: docs/backend_schema.md §2.2
+
+-- TODO: CREATE TABLE public.profiles (
+--   id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+--   full_name text,
+--   username text UNIQUE,
+--   avatar_url text,
+--   major text,
+--   role text,
+--   created_at timestamptz DEFAULT now()
+-- );

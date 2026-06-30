@@ -1,0 +1,11 @@
+-- Migration: group_members
+-- Description: Join table linking users to groups
+-- Docs: docs/backend_schema.md §3.3
+
+-- TODO: CREATE TABLE public.group_members (
+--   id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+--   group_id bigint NOT NULL REFERENCES public.groups(id),
+--   user_id uuid NOT NULL REFERENCES public.profiles(id),
+--   role text DEFAULT 'member',
+--   joined_at timestamptz DEFAULT now()
+-- );
