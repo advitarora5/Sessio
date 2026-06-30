@@ -112,7 +112,7 @@ export function CompleteSessionForm({ session }: CompleteSessionFormProps) {
                 rows={5}
                 value={notes}
                 onChange={(event) => setNotes(event.target.value)}
-                className="focus-ring rounded-md border border-input bg-background px-3 py-2 text-sm"
+                className="focus-ring rounded-md border border-input bg-white px-3 py-2 text-sm text-card-foreground"
                 placeholder="A sentence or two is enough."
               />
             </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { SessioLogo } from "@/components/brand/SessioLogo";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -91,7 +92,14 @@ export function SignUpForm({
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
-        <CardHeader>
+        <CardHeader className="items-center text-center">
+          <SessioLogo
+            className="justify-center"
+            markClassName="h-16 w-16 rounded-2xl"
+            wordmarkClassName="text-2xl"
+            tagline="Deep work, mapped."
+            priority
+          />
           <CardTitle className="text-2xl">Create your Sessio account</CardTitle>
           <CardDescription>
             Add your study context first, then choose your login credentials.
@@ -102,7 +110,7 @@ export function SignUpForm({
             <div className="grid gap-7">
               <section className="grid gap-4">
                 <div>
-                  <p className="text-sm font-semibold text-emerald-900">
+                  <p className="text-sm font-semibold text-[#0F223A]">
                     Step A - Profile
                   </p>
                   <p className="mt-1 text-sm text-muted-foreground">
@@ -149,7 +157,7 @@ export function SignUpForm({
                       required
                       value={year}
                       onChange={(e) => setYear(e.target.value)}
-                      className="focus-ring h-10 rounded-md border border-input bg-background px-3 text-sm"
+                      className="focus-ring h-10 rounded-md border border-input bg-white px-3 text-sm text-card-foreground"
                     >
                       <option value="">Select year</option>
                       {yearOptions.map((option) => (
@@ -179,7 +187,7 @@ export function SignUpForm({
 
               <section className="grid gap-4">
                 <div>
-                  <p className="text-sm font-semibold text-emerald-900">
+                  <p className="text-sm font-semibold text-[#0F223A]">
                     Step B - Credentials
                   </p>
                   <p className="mt-1 text-sm text-muted-foreground">

@@ -1,3 +1,4 @@
+import { SessioLogo } from "@/components/brand/SessioLogo";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Suspense } from "react";
 
@@ -33,7 +34,14 @@ export default function Page({
       <div className="w-full max-w-sm">
         <div className="flex flex-col gap-6">
           <Card>
-            <CardHeader>
+            <CardHeader className="items-center text-center">
+              <SessioLogo
+                className="justify-center"
+                markClassName="h-16 w-16 rounded-2xl"
+                wordmarkClassName="text-2xl"
+                tagline="Deep work, mapped."
+                priority
+              />
               <CardTitle className="text-2xl">
                 Sorry, something went wrong.
               </CardTitle>

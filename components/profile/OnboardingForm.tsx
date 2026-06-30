@@ -100,7 +100,7 @@ export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
                 value={year}
                 onChange={(event) => setYear(event.target.value)}
                 required
-                className="focus-ring h-10 rounded-md border border-input bg-background px-3 text-sm"
+                className="focus-ring h-10 rounded-md border border-input bg-white px-3 text-sm text-card-foreground"
               >
                 <option value="">Select year</option>
                 <option value="Freshman">Freshman</option>

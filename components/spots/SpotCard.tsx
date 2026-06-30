@@ -31,7 +31,7 @@ export function SpotCard({
           isHighlighted ? "border-amber-300 ring-2 ring-amber-200" : ""
         }`}
         style={{
-          boxShadow: `0 0 ${Math.round(16 + intensity * 28)}px rgba(5, 150, 105, ${0.08 + intensity * 0.2})`,
+          boxShadow: `0 0 ${Math.round(16 + intensity * 28)}px rgba(15, 34, 58, ${0.08 + intensity * 0.2})`,
         }}
       >
         <CardContent className="grid h-full gap-4 p-5">

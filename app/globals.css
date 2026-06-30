@@ -4,57 +4,56 @@
 
 @layer base {
   :root {
-    --font-display: var(--font-instrument-serif), serif;
-    --font-body: var(--font-inter), Inter, system-ui, sans-serif;
-    --background: 138 76% 97%;
-    --foreground: 221 39% 11%;
+    --font-body: var(--font-inter, Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+    --background: 214 59% 14%;
+    --foreground: 0 0% 100%;
     --card: 0 0% 100%;
-    --card-foreground: 221 39% 11%;
+    --card-foreground: 214 59% 14%;
     --popover: 0 0% 100%;
-    --popover-foreground: 221 39% 11%;
-    --primary: 160 84% 39%;
+    --popover-foreground: 214 59% 14%;
+    --primary: 214 59% 14%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 162 94% 24%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 142 52% 94%;
+    --secondary: 214 42% 94%;
+    --secondary-foreground: 214 59% 14%;
+    --muted: 214 42% 95%;
     --muted-foreground: 220 9% 46%;
-    --accent: 142 52% 92%;
-    --accent-foreground: 221 39% 11%;
+    --accent: 214 42% 93%;
+    --accent-foreground: 214 59% 14%;
     --destructive: 18 95% 54%;
     --destructive-foreground: 0 0% 100%;
-    --border: 150 28% 84%;
-    --input: 150 28% 84%;
-    --ring: 160 84% 39%;
-    --chart-1: 160 84% 39%;
-    --chart-2: 162 94% 24%;
-    --chart-3: 142 71% 45%;
+    --border: 214 28% 86%;
+    --input: 214 28% 86%;
+    --ring: 214 59% 14%;
+    --chart-1: 214 59% 14%;
+    --chart-2: 213 38% 34%;
+    --chart-3: 217 19% 45%;
     --chart-4: 18 95% 54%;
-    --chart-5: 199 89% 48%;
+    --chart-5: 199 78% 42%;
     --radius: 0.5rem;
   }
   .dark {
-    --background: 166 91% 9%;
+    --background: 214 59% 14%;
     --foreground: 210 40% 98%;
-    --card: 164 64% 12%;
+    --card: 214 51% 18%;
     --card-foreground: 210 40% 98%;
-    --popover: 164 64% 12%;
+    --popover: 214 51% 18%;
     --popover-foreground: 210 40% 98%;
-    --primary: 160 84% 39%;
+    --primary: 0 0% 100%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 150 64% 45%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 164 46% 18%;
-    --muted-foreground: 154 24% 73%;
-    --accent: 164 46% 18%;
+    --secondary: 214 37% 26%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 214 37% 26%;
+    --muted-foreground: 220 9% 64%;
+    --accent: 214 37% 26%;
     --accent-foreground: 210 40% 98%;
     --destructive: 18 95% 54%;
     --destructive-foreground: 0 0% 100%;
-    --border: 164 32% 24%;
-    --input: 164 32% 24%;
-    --ring: 160 84% 39%;
-    --chart-1: 160 84% 39%;
-    --chart-2: 150 64% 45%;
-    --chart-3: 142 71% 45%;
+    --border: 214 28% 28%;
+    --input: 214 28% 28%;
+    --ring: 0 0% 100%;
+    --chart-1: 0 0% 100%;
+    --chart-2: 213 38% 74%;
+    --chart-3: 220 9% 64%;
     --chart-4: 18 95% 54%;
     --chart-5: 199 89% 48%;
   }
@@ -89,9 +88,9 @@
   }
 
   .hero-cinematic {
-    --background: 201 100% 13%;
+    --background: 214 59% 14%;
     --foreground: 0 0% 100%;
-    --muted-foreground: 240 4% 66%;
+    --muted-foreground: 220 9% 64%;
     --primary: 0 0% 100%;
     --primary-foreground: 0 0% 4%;
     --secondary: 0 0% 10%;

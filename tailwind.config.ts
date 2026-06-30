@@ -13,10 +13,23 @@ export default {
     extend: {
       fontFamily: {
         sans: ["var(--font-body)", "Inter", "system-ui", "sans-serif"],
-        heading: ["var(--font-display)", "serif"],
-        display: ["var(--font-display)", "serif"],
+        heading: ["var(--font-body)", "Inter", "system-ui", "sans-serif"],
+        display: ["var(--font-body)", "Inter", "system-ui", "sans-serif"],
       },
       colors: {
+        navy: {
+          DEFAULT: "#0F223A",
+          base: "#0F223A",
+        },
+        pageBg: "#F3F4F6",
+        cardBg: "#FFFFFF",
+        borderSubtle: "#D1D5DB",
+        textMutedSoft: "#9CA3AF",
+        delta: {
+          up: "#16A34A",
+          down: "#EF4444",
+          flat: "#6B7280",
+        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
