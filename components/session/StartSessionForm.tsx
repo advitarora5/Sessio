@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
@@ -41,6 +42,7 @@ export function StartSessionForm({
   const [spotId, setSpotId] = useState(initialSpotId?.toString() ?? "");
   const [visibility, setVisibility] =
     useState<Tables<"sessions">["visibility"]>("group");
+  const [distractionFree, setDistractionFree] = useState(true);
   const [groupId, setGroupId] = useState(groups[0]?.id.toString() ?? "");
   const [notes, setNotes] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -72,6 +74,7 @@ export function StartSessionForm({
       title: title.trim(),
       category,
       target_duration_minutes: targetDuration,
+      distraction_free: distractionFree,
       spot_id: spotId ? Number(spotId) : null,
       group_id: visibility === "group" && groupId ? Number(groupId) : null,
       visibility,
@@ -219,6 +222,23 @@ export function StartSessionForm({
             </select>
           </div>
 
+          <label className="flex items-start gap-3 rounded-lg border border-border bg-muted/20 p-4 text-sm">
+            <Checkbox
+              checked={distractionFree}
+              onCheckedChange={(checked) => setDistractionFree(checked === true)}
+              aria-label="Enable distraction-free mode"
+              className="mt-0.5"
+            />
+            <span>
+              <span className="block font-medium text-foreground">
+                Distraction-free mode
+              </span>
+              <span className="mt-1 block text-muted-foreground">
+                Adds a DND tag to the completed session.
+              </span>
+            </span>
+          </label>
+
           {visibility === "group" && groups.length > 0 ? (
             <div className="grid gap-2">
               <Label htmlFor="group">Share with group</Label>
@@ -276,6 +296,7 @@ export function StartSessionForm({
             <Badge variant="secondary">{category}</Badge>
             <Badge variant="outline">{targetDuration} minutes</Badge>
             <Badge variant="outline">{visibility}</Badge>
+            {distractionFree ? <Badge variant="outline">DND</Badge> : null}
           </div>
           <div className="rounded-lg border border-border bg-muted/30 p-4">
             <div className="flex items-start gap-3">

@@ -1,5 +1,6 @@
 import { ProfileForm } from "@/components/profile/ProfileForm";
 import { StreakBadge } from "@/components/profile/StreakBadge";
+import { UserAvatar } from "@/components/profile/UserAvatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 import { computeStreak, formatDuration } from "@/lib/utils/streak";
@@ -33,6 +34,11 @@ export default async function ProfilePage() {
     0,
   );
   const streak = computeStreak(sessions ?? []);
+  const profileMeta = [
+    profile?.major ?? "Add your major",
+    profile?.year ?? "Add year",
+    profile?.role ?? "STUDENT",
+  ].join(" / ");
 
   return (
     <div className="grid gap-6">
@@ -42,10 +48,7 @@ export default async function ProfilePage() {
           <h1 className="mt-2 text-3xl font-semibold">
             {profile?.full_name ?? user?.email?.split("@")[0] ?? "Your profile"}
           </h1>
-          <p className="mt-2 text-muted-foreground">
-            {profile?.major ?? "Add your major"} · {profile?.year ?? "Add year"} ·{" "}
-            {profile?.role ?? "student"}
-          </p>
+          <p className="mt-2 text-muted-foreground">{profileMeta}</p>
           {profile?.study_focus ? (
             <p className="mt-2 text-sm text-muted-foreground">
               Focus: {profile.study_focus}
@@ -53,13 +56,11 @@ export default async function ProfilePage() {
           ) : null}
         </div>
         <div className="flex items-center gap-4">
-          <div
-            className="h-20 w-20 rounded-full border border-border bg-muted bg-cover bg-center shadow-sm"
-            style={{
-              backgroundImage: profile?.avatar_url
-                ? `url(${profile.avatar_url})`
-                : undefined,
-            }}
+          <UserAvatar
+            name={profile?.full_name}
+            username={profile?.username}
+            avatarUrl={profile?.avatar_url}
+            size="xl"
           />
           <StreakBadge streak={streak} size="large" />
         </div>
@@ -78,7 +79,9 @@ export default async function ProfilePage() {
         <Card className="sessio-card">
           <CardContent className="p-5">
             <Layers3 className="h-5 w-5 text-primary" />
-            <p className="mt-3 text-2xl font-semibold">{sessions?.length ?? 0}</p>
+            <p className="mt-3 text-2xl font-semibold">
+              {sessions?.length ?? 0}
+            </p>
             <p className="text-sm text-muted-foreground">completed sessions</p>
           </CardContent>
         </Card>

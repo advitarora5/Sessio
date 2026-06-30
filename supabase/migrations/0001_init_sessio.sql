@@ -10,7 +10,7 @@ create table public.profiles (
   major text,
   year text,
   study_focus text,
-  role text,
+  role text default 'STUDENT',
   created_at timestamptz not null default now()
 );
 
@@ -55,6 +55,7 @@ create table public.sessions (
   status text not null default 'active',
   target_duration_minutes int not null,
   duration_minutes int,
+  distraction_free boolean not null default false,
   goal_completed boolean,
   notes text,
   summary_ai text,
@@ -348,13 +349,29 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, full_name, avatar_url, username)
+  insert into public.profiles (
+    id,
+    full_name,
+    avatar_url,
+    username,
+    major,
+    year,
+    study_focus,
+    role
+  )
   values (
     new.id,
     coalesce(new.raw_user_meta_data ->> 'full_name', split_part(new.email, '@', 1)),
     new.raw_user_meta_data ->> 'avatar_url',
-    lower(regexp_replace(split_part(new.email, '@', 1), '[^a-zA-Z0-9_]', '', 'g'))
-      || '_' || left(new.id::text, 8)
+    coalesce(
+      nullif(new.raw_user_meta_data ->> 'username', ''),
+      lower(regexp_replace(split_part(new.email, '@', 1), '[^a-zA-Z0-9_]', '', 'g'))
+        || '_' || left(new.id::text, 8)
+    ),
+    nullif(new.raw_user_meta_data ->> 'major', ''),
+    nullif(new.raw_user_meta_data ->> 'year', ''),
+    nullif(new.raw_user_meta_data ->> 'study_focus', ''),
+    coalesce(nullif(upper(new.raw_user_meta_data ->> 'role'), ''), 'STUDENT')
   )
   on conflict (id) do nothing;
 

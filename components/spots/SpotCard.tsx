@@ -10,6 +10,7 @@ type SpotCardProps = {
   tags?: string[] | null;
   sessionsLastWeek: number;
   maxSessions: number;
+  isHighlighted?: boolean;
 };
 
 export function SpotCard({
@@ -19,15 +20,18 @@ export function SpotCard({
   tags,
   sessionsLastWeek,
   maxSessions,
+  isHighlighted = false,
 }: SpotCardProps) {
   const intensity = maxSessions > 0 ? sessionsLastWeek / maxSessions : 0;
 
   return (
     <Link href={`/spots/${id}`} className="focus-ring block rounded-lg">
       <Card
-        className="sessio-card h-full transition hover:-translate-y-0.5 hover:border-primary/70"
+        className={`sessio-card h-full transition hover:-translate-y-0.5 hover:border-primary/70 ${
+          isHighlighted ? "border-amber-300 ring-2 ring-amber-200" : ""
+        }`}
         style={{
-          boxShadow: `0 0 ${Math.round(18 + intensity * 34)}px rgba(124, 58, 237, ${0.1 + intensity * 0.22})`,
+          boxShadow: `0 0 ${Math.round(16 + intensity * 28)}px rgba(5, 150, 105, ${0.08 + intensity * 0.2})`,
         }}
       >
         <CardContent className="grid h-full gap-4 p-5">

@@ -170,6 +170,7 @@ export type Database = {
           status: "active" | "completed" | "canceled";
           target_duration_minutes: number;
           duration_minutes: number | null;
+          distraction_free: boolean;
           goal_completed: boolean | null;
           notes: string | null;
           summary_ai: string | null;
@@ -188,6 +189,7 @@ export type Database = {
           status?: "active" | "completed" | "canceled";
           target_duration_minutes: number;
           duration_minutes?: number | null;
+          distraction_free?: boolean;
           goal_completed?: boolean | null;
           notes?: string | null;
           summary_ai?: string | null;
@@ -206,6 +208,7 @@ export type Database = {
           status?: "active" | "completed" | "canceled";
           target_duration_minutes?: number;
           duration_minutes?: number | null;
+          distraction_free?: boolean;
           goal_completed?: boolean | null;
           notes?: string | null;
           summary_ai?: string | null;

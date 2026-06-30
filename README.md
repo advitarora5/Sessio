@@ -1,6 +1,6 @@
 # Sessio
 
-Sessio is a Strava-style web app for deep work and study sessions. Users can log focus blocks, complete a timer flow, see weekly analytics, browse UIUC campus study spots, add friends, create groups, and give kudos in activity feeds.
+Sessio is a campus-focused deep work app for study sessions. Users can log focus blocks, complete a timer flow, see weekly analytics, browse UIUC campus study spots, add friends, create groups, and give gold stars in activity feeds.
 
 ## Stack
 
@@ -64,16 +64,17 @@ Sessio is a Strava-style web app for deep work and study sessions. Users can log
 | --- | --- |
 | `/` | Landing page |
 | `/login`, `/signup`, `/auth/login`, `/auth/sign-up` | Supabase email/password auth |
-| `/onboarding` | Profile setup for avatar, major, year, and study focus |
+| `/onboarding` | Profile setup for major, year, role, and study focus |
 | `/dashboard` | Weekly focus chart, stats, prominent fire streak, top spots |
 | `/session/new` | Start a focus session with 45/60/90/120 minute presets or a custom duration |
 | `/session/[id]` | Active timer |
 | `/session/[id]/complete` | Goal outcome, notes, AI summary trigger |
-| `/spots`, `/spots/[id]` | Campus heat-style spot list and spot details |
+| `/spots`, `/spots/[id]` | Searchable campus spots, heat view, and spot details |
+| `/heatmap` | Study heatmap powered by Illini spots plus Sessio session intensity |
 | `/friends` | Friend requests, friend list, and friend session feed |
 | `/groups`, `/groups/[id]` | Create/join groups and group activity feed |
 | `/feed` | Public session feed |
-| `/profile` | Profile editing and focus totals |
+| `/profile` | Profile editing, avatar upload, initials fallback, and focus totals |
 | `/api/friends/request`, `/api/friends/[id]` | Friend request and relationship updates |
 | `/api/session-summary` | Server-only session summary generation |
 
@@ -83,6 +84,14 @@ The full MVP schema, RLS policies, grants, indexes, and auth profile trigger liv
 
 ```text
 supabase/migrations/0001_init_sessio.sql
+```
+
+Incremental upgrades for friends, Illini spot upserts, avatar storage policies,
+signup profile metadata, and DND sessions live in:
+
+```text
+supabase/migrations/0002_profiles_friends_illini_upgrade.sql
+supabase/migrations/20260630192119_avatar_storage_and_branding_profile.sql
 ```
 
 Campus spot seed data and the Illini importer live in:

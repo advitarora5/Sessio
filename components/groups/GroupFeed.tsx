@@ -3,7 +3,7 @@
 import { SessionCard } from "@/components/session/SessionCard";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
-import { Heart } from "lucide-react";
+import { Star } from "lucide-react";
 import { useState } from "react";
 
 export type FeedSession = {
@@ -16,9 +16,11 @@ export type FeedSession = {
   goalCompleted: boolean | null;
   summary: string | null;
   actorName: string;
+  actorUsername?: string | null;
   actorAvatarUrl: string | null;
-  kudosCount: number;
-  likedByMe: boolean;
+  goldStarsCount: number;
+  starredByMe: boolean;
+  distractionFree?: boolean | null;
 };
 
 type GroupFeedProps = {
@@ -30,11 +32,11 @@ export function GroupFeed({ sessions, currentUserId }: GroupFeedProps) {
   const [items, setItems] = useState(sessions);
   const [busySessionId, setBusySessionId] = useState<number | null>(null);
 
-  async function toggleKudos(session: FeedSession) {
+  async function toggleGoldStar(session: FeedSession) {
     setBusySessionId(session.id);
     const supabase = createClient();
 
-    if (session.likedByMe) {
+    if (session.starredByMe) {
       await supabase
         .from("likes")
         .delete()
@@ -52,10 +54,10 @@ export function GroupFeed({ sessions, currentUserId }: GroupFeedProps) {
         item.id === session.id
           ? {
               ...item,
-              likedByMe: !item.likedByMe,
-              kudosCount: item.likedByMe
-                ? Math.max(0, item.kudosCount - 1)
-                : item.kudosCount + 1,
+              starredByMe: !item.starredByMe,
+              goldStarsCount: item.starredByMe
+                ? Math.max(0, item.goldStarsCount - 1)
+                : item.goldStarsCount + 1,
             }
           : item,
       ),
@@ -71,6 +73,7 @@ export function GroupFeed({ sessions, currentUserId }: GroupFeedProps) {
             key={session.id}
             title={session.title}
             actorName={session.actorName}
+            actorUsername={session.actorUsername}
             actorAvatarUrl={session.actorAvatarUrl}
             category={session.category}
             durationMinutes={session.durationMinutes}
@@ -78,22 +81,28 @@ export function GroupFeed({ sessions, currentUserId }: GroupFeedProps) {
             startedAt={session.startedAt}
             goalCompleted={session.goalCompleted}
             summary={session.summary}
-            kudosCount={session.kudosCount}
+            goldStarsCount={session.goldStarsCount}
+            distractionFree={session.distractionFree}
             action={
               <Button
                 type="button"
                 size="sm"
-                variant={session.likedByMe ? "default" : "outline"}
-                onClick={() => toggleKudos(session)}
+                variant={session.starredByMe ? "default" : "outline"}
+                onClick={() => toggleGoldStar(session)}
                 disabled={busySessionId === session.id}
+                aria-label={
+                  session.starredByMe
+                    ? "Remove your gold star"
+                    : "Give a gold star"
+                }
                 className="rounded-full"
               >
-                <Heart
+                <Star
                   className={`h-4 w-4 transition ${
-                    session.likedByMe ? "fill-current" : ""
+                    session.starredByMe ? "fill-current" : ""
                   }`}
                 />
-                Kudos
+                Gold star
               </Button>
             }
           />

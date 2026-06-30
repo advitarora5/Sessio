@@ -1,6 +1,7 @@
 "use client";
 
 import { SessionCard } from "@/components/session/SessionCard";
+import { UserAvatar } from "@/components/profile/UserAvatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -32,7 +33,9 @@ type FriendFeedSession = {
   goalCompleted: boolean | null;
   summary: string | null;
   actorName: string;
+  actorUsername: string | null;
   actorAvatarUrl: string | null;
+  distractionFree: boolean | null;
 };
 
 type FriendsManagerProps = {
@@ -115,17 +118,10 @@ export function FriendsManager({
                   className="flex items-center justify-between rounded-lg border border-border bg-card p-3"
                 >
                   <div className="flex items-center gap-3">
-                    <span
-                      aria-hidden="true"
-                      className="h-10 w-10 rounded-full border border-border bg-muted"
-                      style={{
-                        backgroundImage: `url(${
-                          friend.profile.avatar_url ??
-                          `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(displayName(friend.profile))}`
-                        })`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                      }}
+                    <UserAvatar
+                      name={friend.profile.full_name}
+                      username={friend.profile.username}
+                      avatarUrl={friend.profile.avatar_url}
                     />
                     <div>
                       <p className="font-medium">{displayName(friend.profile)}</p>
@@ -163,6 +159,7 @@ export function FriendsManager({
                   key={session.id}
                   title={session.title}
                   actorName={session.actorName}
+                  actorUsername={session.actorUsername}
                   actorAvatarUrl={session.actorAvatarUrl}
                   category={session.category}
                   durationMinutes={session.durationMinutes}
@@ -170,6 +167,7 @@ export function FriendsManager({
                   startedAt={session.startedAt}
                   goalCompleted={session.goalCompleted}
                   summary={session.summary}
+                  distractionFree={session.distractionFree}
                 />
               ))
             ) : (

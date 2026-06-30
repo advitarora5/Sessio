@@ -1,12 +1,13 @@
 "use client";
 
+import { UserAvatar } from "@/components/profile/UserAvatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
 import type { Tables } from "@/types/database";
-import { Save } from "lucide-react";
+import { Save, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -22,10 +23,11 @@ export function ProfileForm({ userId, profile }: ProfileFormProps) {
   const [major, setMajor] = useState(profile?.major ?? "");
   const [year, setYear] = useState(profile?.year ?? "");
   const [studyFocus, setStudyFocus] = useState(profile?.study_focus ?? "");
-  const [role, setRole] = useState(profile?.role ?? "student");
+  const [role, setRole] = useState(profile?.role ?? "STUDENT");
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url ?? "");
   const [message, setMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -40,7 +42,7 @@ export function ProfileForm({ userId, profile }: ProfileFormProps) {
       major: major.trim() || null,
       year: year.trim() || null,
       study_focus: studyFocus.trim() || null,
-      role: role.trim() || null,
+      role: role.trim().toUpperCase() || "STUDENT",
       avatar_url: avatarUrl.trim() || null,
     });
 
@@ -51,6 +53,61 @@ export function ProfileForm({ userId, profile }: ProfileFormProps) {
     }
 
     setMessage("Profile saved.");
+    router.refresh();
+  }
+
+  async function handleAvatarUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setMessage(null);
+
+    if (!file.type.startsWith("image/")) {
+      setMessage("Choose an image file for your profile picture.");
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      setMessage("Profile pictures must be 2 MB or smaller.");
+      return;
+    }
+
+    setIsUploading(true);
+    const supabase = createClient();
+    const extension = file.name.split(".").pop()?.toLowerCase() ?? "png";
+    const filePath = `${userId}/${Date.now()}.${extension}`;
+    const { error: uploadError } = await supabase.storage
+      .from("avatars")
+      .upload(filePath, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (uploadError) {
+      setMessage(uploadError.message);
+      setIsUploading(false);
+      return;
+    }
+
+    const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
+    const publicUrl = data.publicUrl;
+    setAvatarUrl(publicUrl);
+
+    const { error: updateError } = await supabase.from("profiles").upsert({
+      id: userId,
+      avatar_url: publicUrl,
+    });
+
+    setIsUploading(false);
+    if (updateError) {
+      setMessage(updateError.message);
+      return;
+    }
+
+    setMessage("Profile picture uploaded.");
     router.refresh();
   }
 
@@ -110,8 +167,8 @@ export function ProfileForm({ userId, profile }: ProfileFormProps) {
               <Input
                 id="role"
                 value={role}
-                onChange={(event) => setRole(event.target.value)}
-                placeholder="student"
+                onChange={(event) => setRole(event.target.value.toUpperCase())}
+                placeholder="STUDENT"
               />
             </div>
             <div className="grid gap-2">
@@ -124,33 +181,44 @@ export function ProfileForm({ userId, profile }: ProfileFormProps) {
               />
             </div>
           </div>
-          <div className="grid gap-2">
-            <Label htmlFor="avatar">Avatar URL</Label>
-            <Input
-              id="avatar"
-              value={avatarUrl}
-              onChange={(event) => setAvatarUrl(event.target.value)}
-              placeholder="https://..."
+          <div className="grid gap-4 rounded-lg border border-border bg-muted/20 p-4 sm:grid-cols-[auto_1fr] sm:items-center">
+            <UserAvatar
+              name={fullName}
+              username={username}
+              avatarUrl={avatarUrl}
+              size="xl"
             />
-            <div className="grid grid-cols-4 gap-2">
-              {["forest", "sprout", "library", "focus"].map((seed) => {
-                const url = `https://api.dicebear.com/9.x/initials/svg?seed=${seed}`;
-                return (
-                  <button
-                    key={seed}
-                    type="button"
-                    onClick={() => setAvatarUrl(url)}
-                    className="focus-ring rounded-lg border border-border bg-muted px-3 py-2 text-xs capitalize hover:border-primary"
-                  >
-                    {seed}
-                  </button>
-                );
-              })}
+            <div className="grid gap-2">
+              <Label htmlFor="avatar-file">Profile picture</Label>
+              <Input
+                id="avatar-file"
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarUpload}
+                disabled={isUploading}
+              />
+              <p className="text-xs text-muted-foreground">
+                PNG, JPG, WebP, or GIF. Max 2 MB. Without an upload, Sessio uses
+                colored initials.
+              </p>
+              {avatarUrl ? (
+                <button
+                  type="button"
+                  onClick={() => setAvatarUrl("")}
+                  className="w-fit text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                >
+                  Use initials instead
+                </button>
+              ) : null}
             </div>
           </div>
           {message ? <p className="text-sm text-muted-foreground">{message}</p> : null}
-          <Button type="submit" disabled={isSaving}>
-            <Save className="h-4 w-4" />
+          <Button type="submit" disabled={isSaving || isUploading}>
+            {isUploading ? (
+              <Upload className="h-4 w-4" />
+            ) : (
+              <Save className="h-4 w-4" />
+            )}
             {isSaving ? "Saving..." : "Save profile"}
           </Button>
         </form>

@@ -10,7 +10,7 @@ export default async function FeedPage() {
   const { data: sessions } = await supabase
     .from("sessions")
     .select(
-      "id, user_id, title, category, start_time, duration_minutes, goal_completed, summary_ai, spots(name), likes(id, user_id)",
+      "id, user_id, title, category, start_time, duration_minutes, distraction_free, goal_completed, summary_ai, spots(name), likes(id, user_id)",
     )
     .eq("visibility", "public")
     .eq("status", "completed")
@@ -40,9 +40,11 @@ export default async function FeedPage() {
       summary: session.summary_ai,
       actorName:
         profile?.full_name ?? profile?.username ?? `Member ${session.user_id.slice(0, 6)}`,
+      actorUsername: profile?.username ?? null,
       actorAvatarUrl: profile?.avatar_url ?? null,
-      kudosCount: likes.length,
-      likedByMe: likes.some((like) => like.user_id === user?.id),
+      goldStarsCount: likes.length,
+      starredByMe: likes.some((like) => like.user_id === user?.id),
+      distractionFree: session.distraction_free,
     };
   });
 

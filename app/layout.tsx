@@ -12,6 +12,10 @@ export const metadata: Metadata = {
   title: "Sessio",
   description:
     "Log deep work sessions, map study spots, and stay accountable with friends.",
+  icons: {
+    icon: "/images/sessio-logo-mark.png",
+    apple: "/images/sessio-logo-mark.png",
+  },
 };
 
 const inter = Inter({

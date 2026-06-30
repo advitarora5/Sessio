@@ -78,7 +78,7 @@
 
 @layer components {
   .sessio-card {
-    @apply rounded-lg border border-border/80 bg-card/95 shadow-[0_18px_42px_rgba(4,120,87,0.16)];
+    @apply rounded-lg border border-border/80 bg-card/95 shadow-[0_1px_6px_rgba(15,23,42,0.03)];
   }
 
   .focus-ring {

@@ -5,6 +5,7 @@ export type AnalyticsSession = {
   spot_id: number | null;
   start_time: string;
   duration_minutes: number | null;
+  distraction_free?: boolean | null;
   goal_completed: boolean | null;
   summary_ai?: string | null;
   spots?: {
@@ -97,7 +98,10 @@ export function computeDashboardStats(sessions: AnalyticsSession[]) {
   };
 }
 
-export function computeTopSpots(sessions: AnalyticsSession[]): TopSpot[] {
+export function computeTopSpots(
+  sessions: AnalyticsSession[],
+  limit = 3,
+): TopSpot[] {
   const bySpot = new Map<
     number,
     {
@@ -141,5 +145,5 @@ export function computeTopSpots(sessions: AnalyticsSession[]): TopSpot[] {
           : 0,
     }))
     .sort((a, b) => b.totalMinutes - a.totalMinutes)
-    .slice(0, 3);
+    .slice(0, limit);
 }

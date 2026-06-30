@@ -1,7 +1,9 @@
+import { SessioLogo } from "@/components/brand/SessioLogo";
 import { LogoutButton } from "@/components/logout-button";
+import { UserAvatar } from "@/components/profile/UserAvatar";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
-import { Clock3, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import Link from "next/link";
 
 export async function Header() {
@@ -11,7 +13,7 @@ export async function Header() {
   } = await supabase.auth.getUser();
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, avatar_url")
+    .select("full_name, username, avatar_url")
     .eq("id", user?.id ?? "")
     .maybeSingle();
   const displayName =
@@ -23,18 +25,8 @@ export async function Header() {
   return (
     <header className="sticky top-0 z-20 border-b border-border/80 bg-background/85 px-4 py-3 backdrop-blur md:px-6">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
-        <Link href="/dashboard" className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Clock3 className="h-5 w-5" />
-          </span>
-          <span>
-            <span className="block font-heading text-lg font-semibold">
-              Sessio
-            </span>
-            <span className="hidden text-xs text-muted-foreground sm:block">
-              Deep work, mapped.
-            </span>
-          </span>
+        <Link href="/dashboard" aria-label="Sessio dashboard">
+          <SessioLogo tagline="Deep work, mapped." />
         </Link>
         <div className="flex items-center gap-3">
           <Button asChild className="rounded-full">
@@ -46,14 +38,11 @@ export async function Header() {
           <span className="hidden max-w-36 truncate text-sm text-muted-foreground md:inline">
             {displayName}
           </span>
-          <span
-            aria-hidden="true"
-            className="hidden h-9 w-9 rounded-full border border-border bg-muted bg-cover bg-center sm:inline-block"
-            style={{
-              backgroundImage: profile?.avatar_url
-                ? `url(${profile.avatar_url})`
-                : undefined,
-            }}
+          <UserAvatar
+            name={displayName}
+            username={profile?.username}
+            avatarUrl={profile?.avatar_url}
+            className="hidden sm:inline-flex"
           />
           <LogoutButton />
         </div>

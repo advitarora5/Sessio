@@ -22,10 +22,6 @@ export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
   const [major, setMajor] = useState(profile?.major ?? "");
   const [year, setYear] = useState(profile?.year ?? "");
   const [studyFocus, setStudyFocus] = useState(profile?.study_focus ?? "");
-  const [avatarUrl, setAvatarUrl] = useState(
-    profile?.avatar_url ??
-      `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(profile?.full_name ?? "Sessio")}`,
-  );
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -42,8 +38,8 @@ export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
       major: major.trim() || null,
       year: year.trim() || null,
       study_focus: studyFocus.trim() || null,
-      role: "student",
-      avatar_url: avatarUrl.trim() || null,
+      role: "STUDENT",
+      avatar_url: profile?.avatar_url ?? null,
     });
 
     if (updateError) {
@@ -123,29 +119,6 @@ export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
               onChange={(event) => setStudyFocus(event.target.value)}
               placeholder="CS 374, research writing, startup sprint..."
             />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="onboarding-avatar">Avatar URL</Label>
-            <Input
-              id="onboarding-avatar"
-              value={avatarUrl}
-              onChange={(event) => setAvatarUrl(event.target.value)}
-            />
-            <div className="flex flex-wrap gap-2">
-              {["forest", "sprout", "library", "focus"].map((seed) => {
-                const url = `https://api.dicebear.com/9.x/initials/svg?seed=${seed}`;
-                return (
-                  <button
-                    key={seed}
-                    type="button"
-                    onClick={() => setAvatarUrl(url)}
-                    className="focus-ring rounded-full border border-border px-3 py-2 text-sm capitalize hover:border-primary"
-                  >
-                    {seed}
-                  </button>
-                );
-              })}
-            </div>
           </div>
           {error ? <p className="text-sm text-destructive">{error}</p> : null}
           <Button type="submit" size="lg" disabled={isSaving}>

@@ -1,7 +1,8 @@
+import { UserAvatar } from "@/components/profile/UserAvatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatDuration } from "@/lib/utils/streak";
-import { CheckCircle2, Clock3, MapPinned, Sparkles } from "lucide-react";
+import { CheckCircle2, Clock3, MapPinned, Sparkles, Star } from "lucide-react";
 
 type SessionCardProps = {
   title: string;
@@ -12,8 +13,10 @@ type SessionCardProps = {
   goalCompleted?: boolean | null;
   summary?: string | null;
   actorName?: string | null;
+  actorUsername?: string | null;
   actorAvatarUrl?: string | null;
-  kudosCount?: number;
+  goldStarsCount?: number;
+  distractionFree?: boolean | null;
   action?: React.ReactNode;
 };
 
@@ -26,8 +29,10 @@ export function SessionCard({
   goalCompleted,
   summary,
   actorName,
+  actorUsername,
   actorAvatarUrl,
-  kudosCount,
+  goldStarsCount,
+  distractionFree,
   action,
 }: SessionCardProps) {
   return (
@@ -37,14 +42,11 @@ export function SessionCard({
           <div>
             {actorName ? (
               <div className="mb-1 flex items-center gap-2 text-sm text-muted-foreground">
-                <span
-                  aria-hidden="true"
-                  className="h-7 w-7 rounded-full border border-border bg-muted bg-cover bg-center"
-                  style={{
-                    backgroundImage: actorAvatarUrl
-                      ? `url(${actorAvatarUrl})`
-                      : undefined,
-                  }}
+                <UserAvatar
+                  name={actorName}
+                  username={actorUsername}
+                  avatarUrl={actorAvatarUrl}
+                  size="sm"
                 />
                 {actorName}
               </div>
@@ -62,6 +64,7 @@ export function SessionCard({
               {goalCompleted ? "Goal met" : "Logged"}
             </Badge>
           ) : null}
+          {distractionFree ? <Badge variant="outline">DND</Badge> : null}
         </div>
 
         <div className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-3">
@@ -87,8 +90,11 @@ export function SessionCard({
           </p>
         ) : null}
 
-        {typeof kudosCount === "number" ? (
-          <p className="text-sm text-muted-foreground">{kudosCount} kudos</p>
+        {typeof goldStarsCount === "number" ? (
+          <p className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+            <Star className="h-4 w-4 fill-amber-400 text-amber-500" />
+            {goldStarsCount} {goldStarsCount === 1 ? "gold star" : "gold stars"}
+          </p>
         ) : null}
       </CardContent>
     </Card>
