@@ -10,6 +10,7 @@ export const navItems = [
   { href: "/spots", label: "Spots" },
   { href: "/heatmap", label: "Heatmap" },
   { href: "/groups", label: "Groups" },
+  { href: "/calendar", label: "Calendar" },
   { href: "/friends", label: "Friends" },
   { href: "/feed", label: "Feed" },
 ];
