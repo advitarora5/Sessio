@@ -11,20 +11,24 @@ export default async function SpotsPage() {
     loadCampusSpots(supabase),
     supabase
       .from("sessions")
-      .select("spot_id, duration_minutes")
-      .eq("status", "completed")
+      .select("spot_id, status, duration_minutes")
+      .in("status", ["completed", "active"])
       .gte("start_time", weekAgo.toISOString())
       .not("spot_id", "is", null),
   ]);
 
-  const metrics = new Map<number, { sessionsLastWeek: number; totalMinutes: number }>();
+  const metrics = new Map<number, { sessionsLastWeek: number; totalMinutes: number; activeSessions: number }>();
   (sessions ?? []).forEach((session) => {
     if (session.spot_id) {
       const existing =
         metrics.get(session.spot_id) ??
-        { sessionsLastWeek: 0, totalMinutes: 0 };
-      existing.sessionsLastWeek += 1;
-      existing.totalMinutes += session.duration_minutes ?? 0;
+        { sessionsLastWeek: 0, totalMinutes: 0, activeSessions: 0 };
+      if (session.status === "completed") {
+        existing.sessionsLastWeek += 1;
+        existing.totalMinutes += session.duration_minutes ?? 0;
+      } else if (session.status === "active") {
+        existing.activeSessions += 1;
+      }
       metrics.set(session.spot_id, existing);
     }
   });
@@ -33,6 +37,7 @@ export default async function SpotsPage() {
     ...spot,
     sessionsLastWeek: metrics.get(spot.id)?.sessionsLastWeek ?? 0,
     totalMinutes: metrics.get(spot.id)?.totalMinutes ?? 0,
+    activeSessions: metrics.get(spot.id)?.activeSessions ?? 0,
   }));
 
   return (
