@@ -1,5 +1,6 @@
 "use client";
 
+import { SessioLogo } from "@/components/brand/SessioLogo";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -48,7 +49,14 @@ export function ForgotPasswordForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       {success ? (
         <Card>
-          <CardHeader>
+          <CardHeader className="items-center text-center">
+            <SessioLogo
+              className="justify-center"
+              markClassName="h-16 w-16 rounded-2xl"
+              wordmarkClassName="text-2xl"
+              tagline="Deep work, mapped."
+              priority
+            />
             <CardTitle className="text-2xl">Check Your Email</CardTitle>
             <CardDescription>Password reset instructions sent</CardDescription>
           </CardHeader>
@@ -61,7 +69,14 @@ export function ForgotPasswordForm({
         </Card>
       ) : (
         <Card>
-          <CardHeader>
+          <CardHeader className="items-center text-center">
+            <SessioLogo
+              className="justify-center"
+              markClassName="h-16 w-16 rounded-2xl"
+              wordmarkClassName="text-2xl"
+              tagline="Deep work, mapped."
+              priority
+            />
             <CardTitle className="text-2xl">Reset Your Password</CardTitle>
             <CardDescription>
               Type in your email and we&apos;ll send you a link to reset your

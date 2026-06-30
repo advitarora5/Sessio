@@ -93,7 +93,7 @@ export function SessionTimer({ session }: SessionTimerProps) {
                 </Badge>
               ) : null}
             </div>
-            <h1 className="font-heading text-3xl font-semibold">
+            <h1 className="text-3xl font-semibold">
               {session.title}
             </h1>
             <p className="mt-2 text-muted-foreground">
@@ -102,11 +102,11 @@ export function SessionTimer({ session }: SessionTimerProps) {
           </div>
 
           <div className="mx-auto flex h-72 w-72 items-center justify-center rounded-full p-3 sm:h-80 sm:w-80" style={ringStyle}>
-            <div className="flex h-full w-full flex-col items-center justify-center rounded-full bg-background shadow-inner">
+            <div className="flex h-full w-full flex-col items-center justify-center rounded-full bg-card shadow-inner">
               <span className="text-sm font-medium text-muted-foreground">
                 Elapsed
               </span>
-              <span className="mt-2 font-heading text-6xl font-bold">
+              <span className="mt-2 text-6xl font-bold">
                 {formatClock(elapsedSeconds)}
               </span>
               <span className="mt-3 text-sm text-muted-foreground">

@@ -1,11 +1,21 @@
+import { SessioMark } from "@/components/brand/SessioMark";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
+
+type SessioLogoVariant = "navy" | "white";
 
 type SessioLogoProps = {
   className?: string;
   markClassName?: string;
   wordmarkClassName?: string;
+  taglineClassName?: string;
   tagline?: string;
+  /**
+   * `navy` (default) renders the mark + wordmark in navy for light surfaces.
+   * `white` renders both in white for navy header/sidebar surfaces.
+   */
+  variant?: SessioLogoVariant;
+  showWordmark?: boolean;
+  /** Kept for API compatibility with previous priority-image usage. */
   priority?: boolean;
 };
 
@@ -13,41 +23,53 @@ export function SessioLogo({
   className,
   markClassName,
   wordmarkClassName,
+  taglineClassName,
   tagline,
-  priority = false,
+  variant = "navy",
+  showWordmark = true,
 }: SessioLogoProps) {
+  const isWhite = variant === "white";
+
   return (
     <span className={cn("inline-flex items-center gap-3", className)}>
       <span
         className={cn(
-          "relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-emerald-100 bg-white shadow-[0_1px_6px_rgba(16,185,129,0.12)]",
+          "relative inline-flex h-11 w-11 shrink-0 items-center justify-center",
           markClassName,
         )}
       >
-        <Image
-          src="/images/sessio-logo-mark.png"
-          alt="Sessio"
-          fill
-          priority={priority}
-          sizes="64px"
-          className="object-contain"
+        <SessioMark
+          title={showWordmark ? undefined : "Sessio"}
+          className={cn(
+            "h-full w-auto",
+            isWhite ? "text-white" : "text-[#0F223A]",
+          )}
         />
       </span>
-      <span className="min-w-0">
-        <span
-          className={cn(
-            "block font-heading text-lg font-semibold leading-none text-emerald-950",
-            wordmarkClassName,
-          )}
-        >
-          Sessio
-        </span>
-        {tagline ? (
-          <span className="mt-1 hidden text-xs text-muted-foreground sm:block">
-            {tagline}
+      {showWordmark ? (
+        <span className="min-w-0">
+          <span
+            className={cn(
+              "block text-lg font-semibold leading-none tracking-normal",
+              isWhite ? "text-white" : "text-[#0F223A]",
+              wordmarkClassName,
+            )}
+          >
+            Sessio
           </span>
-        ) : null}
-      </span>
+          {tagline ? (
+            <span
+              className={cn(
+                "mt-1 hidden text-xs sm:block",
+                isWhite ? "text-slate-300" : "text-muted-foreground",
+                taglineClassName,
+              )}
+            >
+              {tagline}
+            </span>
+          ) : null}
+        </span>
+      ) : null}
     </span>
   );
 }

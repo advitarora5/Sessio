@@ -1,5 +1,6 @@
 "use client";
 
+import { SessioLogo } from "@/components/brand/SessioLogo";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -45,7 +46,14 @@ export function UpdatePasswordForm({
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
-        <CardHeader>
+        <CardHeader className="items-center text-center">
+          <SessioLogo
+            className="justify-center"
+            markClassName="h-16 w-16 rounded-2xl"
+            wordmarkClassName="text-2xl"
+            tagline="Deep work, mapped."
+            priority
+          />
           <CardTitle className="text-2xl">Reset Your Password</CardTitle>
           <CardDescription>
             Please enter your new password below.
