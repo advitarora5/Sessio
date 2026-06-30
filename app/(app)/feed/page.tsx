@@ -1,8 +1,61 @@
-export default function FeedPage() {
+import { GroupFeed, type FeedSession } from "@/components/groups/GroupFeed";
+import { createClient } from "@/lib/supabase/server";
+
+export default async function FeedPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { data: sessions } = await supabase
+    .from("sessions")
+    .select(
+      "id, user_id, title, category, start_time, duration_minutes, goal_completed, summary_ai, spots(name), likes(id, user_id)",
+    )
+    .eq("visibility", "public")
+    .eq("status", "completed")
+    .order("start_time", { ascending: false })
+    .limit(30);
+
+  const userIds = Array.from(new Set((sessions ?? []).map((session) => session.user_id)));
+  const { data: profiles } =
+    userIds.length > 0
+      ? await supabase
+          .from("profiles")
+          .select("id, full_name, username, avatar_url")
+          .in("id", userIds)
+      : { data: [] };
+  const profileById = new Map((profiles ?? []).map((profile) => [profile.id, profile]));
+  const feedSessions: FeedSession[] = (sessions ?? []).map((session) => {
+    const profile = profileById.get(session.user_id);
+    const likes = session.likes ?? [];
+    return {
+      id: session.id,
+      title: session.title,
+      category: session.category,
+      durationMinutes: session.duration_minutes,
+      spotName: session.spots?.name ?? null,
+      startedAt: session.start_time,
+      goalCompleted: session.goal_completed,
+      summary: session.summary_ai,
+      actorName:
+        profile?.full_name ?? profile?.username ?? `Member ${session.user_id.slice(0, 6)}`,
+      actorAvatarUrl: profile?.avatar_url ?? null,
+      kudosCount: likes.length,
+      likedByMe: likes.some((like) => like.user_id === user?.id),
+    };
+  });
+
   return (
-    <>
-      <h1 className="text-2xl font-semibold">Feed</h1>
-      <p className="mt-2 text-muted-foreground">Scaffold placeholder</p>
-    </>
+    <div className="grid gap-6">
+      <div>
+        <p className="text-sm font-medium text-primary">Activity feed</p>
+        <h1 className="mt-2 text-3xl font-semibold">Public sessions</h1>
+        <p className="mt-2 text-muted-foreground">
+          Recent public focus blocks from the Sessio campus graph.
+        </p>
+      </div>
+      {user ? <GroupFeed sessions={feedSessions} currentUserId={user.id} /> : null}
+    </div>
   );
 }

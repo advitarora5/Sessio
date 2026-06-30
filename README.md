@@ -1,70 +1,93 @@
 # Sessio
 
-Web app for logging focused study sessions, visualizing effort, and sharing progress with friend groups.
+Sessio is a Strava-style web app for deep work and study sessions. Users can log focus blocks, complete a timer flow, see weekly analytics, browse UIUC campus study spots, add friends, create groups, and give kudos in activity feeds.
 
 ## Stack
 
-- **Frontend:** Next.js (App Router), TypeScript, Tailwind CSS
-- **Backend:** Supabase (Postgres, Auth, RLS)
-- **Deployment:** Vercel + Supabase Cloud
+- Next.js App Router, TypeScript, Tailwind CSS
+- Supabase Auth, Postgres, Row Level Security
+- Recharts for dashboard charts
+- lucide-react for icons
 
-## Project structure
+## Setup
 
-```
-app/              Next.js routes (landing, auth, app pages, API)
-components/       UI and feature components (stubs)
-lib/              Supabase clients, utilities, theme constants
-types/            App and database types
-supabase/         Migrations, seed data, CLI config
-docs/             PRD, TRD, schema, implementation plan
-```
+1. Install dependencies:
 
-## Getting started
+   ```bash
+   npm install
+   ```
 
-1. Copy environment variables:
+2. Copy environment variables:
 
    ```bash
    cp .env.example .env.local
    ```
 
-2. Add your Supabase URL and anon key from [Supabase Dashboard](https://app.supabase.com) → Project Settings → API.
-
-3. Install dependencies and run the dev server:
+3. Fill in:
 
    ```bash
-   npm install
-   npm run dev
+   NEXT_PUBLIC_SUPABASE_URL=
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=
+   SUPABASE_URL=
+   SUPABASE_SERVICE_ROLE_KEY=
+   OPENAI_API_KEY=
+   OPENAI_MODEL=gpt-5.5
    ```
 
-4. Apply database migrations (after filling in SQL stubs):
+   `OPENAI_API_KEY` is optional. Without it, the summary route writes a local fallback sentence.
+
+4. Apply the Supabase schema:
 
    ```bash
    npx supabase db push
    ```
 
-## Documentation
+   If you already have an older Sessio database, apply `supabase/migrations/0002_profiles_friends_illini_upgrade.sql` after the base schema to add onboarding fields, friend relationships, profile insert RLS, and spot upserts.
 
-See the `docs/` folder:
+5. Load campus spots:
 
-- `prd.md` — product requirements
-- `trd.md` — technical requirements
-- `backend_schema.md` — database schema and RLS
-- `implementation_plan.md` — phased build plan
-- `web_app_flow.md` — UX flows
-- `uiux_design_brief.md` — design system
+   ```bash
+   npm run import:illini-spots
+   ```
 
-## Routes (scaffold)
+   The importer reads the cloned `illinispots` dataset and upserts UIUC buildings into `spots`. `supabase/seed.sql` remains available as a smaller fallback seed.
+
+6. Run the app:
+
+   ```bash
+   npm run dev
+   ```
+
+## Core Routes
 
 | Route | Purpose |
-|-------|---------|
-| `/` | Landing |
-| `/auth/login`, `/auth/sign-up` | Authentication |
-| `/dashboard` | Main dashboard |
-| `/session/new` | Start session |
-| `/session/[id]` | Session timer |
-| `/session/[id]/complete` | Session completion |
-| `/spots`, `/spots/[id]` | Campus spots |
-| `/groups`, `/groups/[id]` | Groups and feed |
-| `/profile` | User profile |
-| `/feed` | Global feed (optional) |
-| `/api/session-summary` | AI summary (server-only) |
+| --- | --- |
+| `/` | Landing page |
+| `/login`, `/signup`, `/auth/login`, `/auth/sign-up` | Supabase email/password auth |
+| `/onboarding` | Profile setup for avatar, major, year, and study focus |
+| `/dashboard` | Weekly focus chart, stats, prominent fire streak, top spots |
+| `/session/new` | Start a focus session with 45/60/90/120 minute presets or a custom duration |
+| `/session/[id]` | Active timer |
+| `/session/[id]/complete` | Goal outcome, notes, AI summary trigger |
+| `/spots`, `/spots/[id]` | Campus heat-style spot list and spot details |
+| `/friends` | Friend requests, friend list, and friend session feed |
+| `/groups`, `/groups/[id]` | Create/join groups and group activity feed |
+| `/feed` | Public session feed |
+| `/profile` | Profile editing and focus totals |
+| `/api/friends/request`, `/api/friends/[id]` | Friend request and relationship updates |
+| `/api/session-summary` | Server-only session summary generation |
+
+## Database
+
+The full MVP schema, RLS policies, grants, indexes, and auth profile trigger live in:
+
+```text
+supabase/migrations/0001_init_sessio.sql
+```
+
+Campus spot seed data and the Illini importer live in:
+
+```text
+supabase/seed.sql
+scripts/import-illini-spots.mjs
+```

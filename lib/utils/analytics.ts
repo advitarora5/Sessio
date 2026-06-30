@@ -1,5 +1,145 @@
-/** Dashboard analytics helpers — see docs/implementation_plan.md Phase 4 */
+export type AnalyticsSession = {
+  id: number;
+  title?: string;
+  category?: string | null;
+  spot_id: number | null;
+  start_time: string;
+  duration_minutes: number | null;
+  goal_completed: boolean | null;
+  summary_ai?: string | null;
+  spots?: {
+    id: number;
+    name: string;
+    area: string | null;
+  } | null;
+};
 
-export function aggregateWeeklyFocus(): Record<string, number> {
-  throw new Error("Not implemented");
+export type WeeklyFocusPoint = {
+  date: string;
+  label: string;
+  minutes: number;
+};
+
+export type TopSpot = {
+  id: number;
+  name: string;
+  area: string | null;
+  totalMinutes: number;
+  sessions: number;
+  goalRate: number;
+};
+
+function dateKey(date: Date) {
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-");
+}
+
+export function aggregateWeeklyFocus(
+  sessions: AnalyticsSession[],
+): WeeklyFocusPoint[] {
+  const today = new Date();
+  today.setHours(12, 0, 0, 0);
+
+  const points = Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(today);
+    date.setDate(today.getDate() - (6 - index));
+
+    return {
+      date: dateKey(date),
+      label: date.toLocaleDateString(undefined, { weekday: "short" }),
+      minutes: 0,
+    };
+  });
+
+  const pointByDate = new Map(points.map((point) => [point.date, point]));
+
+  sessions.forEach((session) => {
+    const point = pointByDate.get(dateKey(new Date(session.start_time)));
+
+    if (point) {
+      point.minutes += session.duration_minutes ?? 0;
+    }
+  });
+
+  return points;
+}
+
+export function computeDashboardStats(sessions: AnalyticsSession[]) {
+  const weekStart = new Date();
+  weekStart.setHours(0, 0, 0, 0);
+  weekStart.setDate(weekStart.getDate() - 6);
+
+  const weekSessions = sessions.filter(
+    (session) => new Date(session.start_time) >= weekStart,
+  );
+  const totalMinutes = weekSessions.reduce(
+    (sum, session) => sum + (session.duration_minutes ?? 0),
+    0,
+  );
+  const averageDuration =
+    weekSessions.length > 0 ? Math.round(totalMinutes / weekSessions.length) : 0;
+  const completedGoals = weekSessions.filter(
+    (session) => session.goal_completed,
+  ).length;
+  const goalRate =
+    weekSessions.length > 0
+      ? Math.round((completedGoals / weekSessions.length) * 100)
+      : 0;
+
+  return {
+    totalMinutes,
+    totalSessions: weekSessions.length,
+    averageDuration,
+    goalRate,
+  };
+}
+
+export function computeTopSpots(sessions: AnalyticsSession[]): TopSpot[] {
+  const bySpot = new Map<
+    number,
+    {
+      id: number;
+      name: string;
+      area: string | null;
+      totalMinutes: number;
+      sessions: number;
+      completedGoals: number;
+    }
+  >();
+
+  sessions.forEach((session) => {
+    if (!session.spot_id || !session.spots) {
+      return;
+    }
+
+    const existing =
+      bySpot.get(session.spot_id) ??
+      {
+        id: session.spot_id,
+        name: session.spots.name,
+        area: session.spots.area,
+        totalMinutes: 0,
+        sessions: 0,
+        completedGoals: 0,
+      };
+
+    existing.totalMinutes += session.duration_minutes ?? 0;
+    existing.sessions += 1;
+    existing.completedGoals += session.goal_completed ? 1 : 0;
+    bySpot.set(session.spot_id, existing);
+  });
+
+  return Array.from(bySpot.values())
+    .map((spot) => ({
+      ...spot,
+      goalRate:
+        spot.sessions > 0
+          ? Math.round((spot.completedGoals / spot.sessions) * 100)
+          : 0,
+    }))
+    .sort((a, b) => b.totalMinutes - a.totalMinutes)
+    .slice(0, 3);
 }

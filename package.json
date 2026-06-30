@@ -5,6 +5,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "import:illini-spots": "node scripts/import-illini-spots.mjs",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -21,6 +22,7 @@
     "next-themes": "^0.4.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "recharts": "^3.9.1",
     "tailwind-merge": "^3.3.0"
   },
   "devDependencies": {
