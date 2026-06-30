@@ -5,6 +5,7 @@ import {
   Gauge,
   MapPinned,
   Radio,
+  Trophy,
   Users,
   UsersRound,
 } from "lucide-react";
@@ -15,6 +16,7 @@ const navItems = [
   { href: "/session/new", label: "Start", icon: Flame },
   { href: "/spots", label: "Spots", icon: MapPinned },
   { href: "/heatmap", label: "Heatmap", icon: Gauge },
+  { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
   { href: "/groups", label: "Groups", icon: Users },
   { href: "/friends", label: "Friends", icon: UsersRound },
   { href: "/feed", label: "Feed", icon: Radio },

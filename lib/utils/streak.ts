@@ -26,9 +26,11 @@ export function computeStreak(sessions: CompletedSessionLike[]): number {
       .map((session) => toLocalDateKey(session.start_time)),
   );
 
-  let streak = 0;
+  // Grace day: if no session today but yesterday has one, the streak is still alive.
+  const startOffset = completedDays.has(offsetDateKey(0)) ? 0 : 1;
 
-  for (let offset = 0; offset < 366; offset += 1) {
+  let streak = 0;
+  for (let offset = startOffset; offset < 366; offset += 1) {
     if (!completedDays.has(offsetDateKey(offset))) {
       break;
     }
