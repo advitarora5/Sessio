@@ -15,6 +15,7 @@ export type FeedSession = {
   startedAt: string;
   goalCompleted: boolean | null;
   summary: string | null;
+  mediaUrl: string | null;
   actorName: string;
   actorUsername?: string | null;
   actorAvatarUrl: string | null;
@@ -81,6 +82,7 @@ export function GroupFeed({ sessions, currentUserId }: GroupFeedProps) {
             startedAt={session.startedAt}
             goalCompleted={session.goalCompleted}
             summary={session.summary}
+            mediaUrl={session.mediaUrl}
             goldStarsCount={session.goldStarsCount}
             distractionFree={session.distractionFree}
             action={

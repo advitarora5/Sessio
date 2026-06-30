@@ -15,13 +15,15 @@ type OnboardingFormProps = {
   profile: Tables<"profiles"> | null;
 };
 
+const roleOptions = ["Student", "Faculty", "Staff", "Grad Student", "Researcher"];
+
 export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
   const router = useRouter();
   const [fullName, setFullName] = useState(profile?.full_name ?? "");
   const [username, setUsername] = useState(profile?.username ?? "");
   const [major, setMajor] = useState(profile?.major ?? "");
   const [year, setYear] = useState(profile?.year ?? "");
-  const [studyFocus, setStudyFocus] = useState(profile?.study_focus ?? "");
+  const [role, setRole] = useState(profile?.role ?? "");
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -34,11 +36,10 @@ export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
     const { error: updateError } = await supabase.from("profiles").upsert({
       id: userId,
       full_name: fullName.trim() || null,
-      username: username.trim() || null,
+      username: username.trim().toLowerCase().replace(/[^a-z0-9_]/g, '') || null,
       major: major.trim() || null,
       year: year.trim() || null,
-      study_focus: studyFocus.trim() || null,
-      role: "STUDENT",
+      role: role || null,
       avatar_url: profile?.avatar_url ?? null,
     });
 
@@ -78,6 +79,7 @@ export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
                 id="onboarding-username"
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
+                placeholder="DuBistGutGenug67"
                 required
               />
             </div>
@@ -112,13 +114,21 @@ export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
             </div>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="onboarding-focus">Study focus</Label>
-            <Input
-              id="onboarding-focus"
-              value={studyFocus}
-              onChange={(event) => setStudyFocus(event.target.value)}
-              placeholder="CS 374, research writing, startup sprint..."
-            />
+            <Label htmlFor="onboarding-role">Role</Label>
+            <select
+              id="onboarding-role"
+              value={role}
+              onChange={(event) => setRole(event.target.value)}
+              required
+              className="focus-ring h-10 rounded-md border border-input bg-background px-3 text-sm"
+            >
+              <option value="">Select role</option>
+              {roleOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
           </div>
           {error ? <p className="text-sm text-destructive">{error}</p> : null}
           <Button type="submit" size="lg" disabled={isSaving}>
