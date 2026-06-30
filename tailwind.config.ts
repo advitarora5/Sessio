@@ -12,8 +12,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
-        heading: ["var(--font-poppins)", "Poppins", "system-ui", "sans-serif"],
+        sans: ["var(--font-body)", "Inter", "system-ui", "sans-serif"],
+        heading: ["var(--font-display)", "serif"],
+        display: ["var(--font-display)", "serif"],
       },
       colors: {
         background: "hsl(var(--background))",

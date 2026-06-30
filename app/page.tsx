@@ -1,129 +1,403 @@
-import { AuthButton } from "@/components/auth-button";
-import { SessioLogo } from "@/components/brand/SessioLogo";
-import { Button } from "@/components/ui/button";
-import { hasEnvVars } from "@/lib/utils";
-import { BarChart3, MapPinned, Star, TimerReset, Users } from "lucide-react";
+import {
+  BarChart3,
+  CheckCircle2,
+  Clock3,
+  Flame,
+  MapPinned,
+  Star,
+  TimerReset,
+  TrendingUp,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
 
-const previewStats = [
-  { label: "This week", value: "8h 35m", icon: BarChart3 },
-  { label: "Streak", value: "4 days", icon: TimerReset },
-  { label: "Top spot", value: "Grainger", icon: MapPinned },
+const videoSrc =
+  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4";
+
+const navLinks = [
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Spots", href: "/spots" },
+  { label: "Groups", href: "/groups" },
+  { label: "About", href: "#product" },
+  { label: "Contact", href: "mailto:hello@sessio.app" },
+];
+
+const kpis = [
+  {
+    label: "Total Focus Time This Week",
+    value: "8h 35m",
+    delta: "+18% vs last week",
+    icon: Clock3,
+  },
+  {
+    label: "Sessions Completed",
+    value: "11",
+    delta: "+3 vs last week",
+    icon: BarChart3,
+  },
+  {
+    label: "Avg Session Length",
+    value: "47m",
+    delta: "+6% vs last week",
+    icon: TimerReset,
+  },
+  {
+    label: "% Goals Hit",
+    value: "82%",
+    delta: "+9 pts vs last week",
+    icon: CheckCircle2,
+  },
+];
+
+const weeklyBars = [
+  { label: "Mon", height: "36%" },
+  { label: "Tue", height: "54%" },
+  { label: "Wed", height: "42%" },
+  { label: "Thu", height: "78%" },
+  { label: "Fri", height: "64%" },
+  { label: "Sat", height: "48%" },
+  { label: "Sun", height: "86%" },
+];
+
+const spotScores = [
+  { name: "Grainger Level 2", score: 92 },
+  { name: "ECEB Atrium", score: 81 },
+  { name: "Main Library", score: 74 },
+];
+
+const topSpots = [
+  { name: "Grainger Level 2", total: "3h 20m", score: "92%" },
+  { name: "ECEB Atrium", total: "2h 45m", score: "81%" },
+  { name: "BIF Study Commons", total: "1h 55m", score: "77%" },
+  { name: "Main Library", total: "1h 30m", score: "74%" },
+  { name: "EnterpriseWorks", total: "1h 05m", score: "69%" },
+];
+
+const recentSessions = [
+  {
+    title: "CS 225 MP debugging",
+    duration: "42m",
+    spot: "Grainger Level 2",
+    score: "100%",
+    dnd: true,
+  },
+  {
+    title: "Research methods outline",
+    duration: "55m",
+    spot: "Main Library",
+    score: "84%",
+    dnd: true,
+  },
+  {
+    title: "Calc review set",
+    duration: "38m",
+    spot: "ECEB Atrium",
+    score: "76%",
+    dnd: false,
+  },
 ];
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[linear-gradient(180deg,#f0fdf4_0%,#ffffff_62%,#ecfdf5_100%)] text-foreground">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5">
-        <Link href="/" aria-label="Sessio home">
-          <SessioLogo priority tagline="Deep work, mapped." />
-        </Link>
-        {hasEnvVars ? (
-          <Suspense>
-            <AuthButton />
-          </Suspense>
-        ) : (
-          <Button asChild variant="outline" className="rounded-full">
-            <Link href="/auth/login">Set env vars first</Link>
-          </Button>
-        )}
-      </nav>
+    <main className="bg-[linear-gradient(180deg,#052e25_0%,#ecfdf5_19%,#ffffff_100%)] text-foreground">
+      <section className="hero-cinematic relative flex min-h-screen flex-col overflow-hidden bg-background text-foreground">
+        <video
+          className="absolute inset-0 z-0 h-full w-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-hidden="true"
+        >
+          <source src={videoSrc} type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(0,0,0,0.38)_0%,rgba(0,0,0,0.16)_44%,rgba(0,0,0,0.52)_100%)]" />
 
-      <section className="mx-auto flex max-w-7xl flex-col px-5 pb-16 pt-8 lg:pb-24 lg:pt-14">
-        <div className="max-w-4xl">
-          <p className="mb-5 inline-flex rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-medium text-emerald-800 shadow-[0_1px_6px_rgba(15,23,42,0.03)]">
-            Social accountability for deep work
-          </p>
-          <h1 className="font-heading text-4xl font-bold leading-tight text-emerald-950 sm:text-5xl lg:text-6xl">
-            Log your deep work, map your study spots, and stay accountable with
-            friends.
+        <nav className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-6 sm:px-8">
+          <Link
+            href="/"
+            className="text-3xl tracking-normal text-foreground"
+            style={{ fontFamily: "var(--font-display)" }}
+            aria-label="Sessio home"
+          >
+            Sessio
+          </Link>
+
+          <div className="hidden items-center gap-8 md:flex">
+            {navLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          <Link
+            href="/session/new"
+            className="liquid-glass rounded-full px-5 py-2.5 text-sm text-foreground transition-transform hover:scale-[1.03] sm:px-6"
+          >
+            Start a session
+          </Link>
+        </nav>
+
+        <div className="relative z-10 flex flex-1 flex-col items-center px-6 pb-44 pt-24 text-center sm:pt-32 lg:pb-52">
+          <h1
+            className="animate-fade-rise max-w-7xl text-5xl font-normal leading-[0.95] tracking-normal sm:text-7xl md:text-8xl"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            Deep focus,{" "}
+            <em className="not-italic text-muted-foreground">mapped</em>{" "}
+            across your campus.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-emerald-900/80">
-            Sessio turns focused study blocks into lightweight session cards,
-            weekly analytics, campus spot insights, and classroom-style gold
-            stars from friends.
+          <p className="animate-fade-rise-delay mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            Sessio turns study sessions into cinematic blocks of focus with
+            maps, analytics, and classroom-style gold stars from friends.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button asChild size="lg" className="rounded-full">
-              <Link href="/session/new">Start a session</Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="rounded-full">
-              <Link href="/auth/sign-up">Create account</Link>
-            </Button>
+          <div className="animate-fade-rise-delay-2 mt-12 flex flex-col items-center gap-4">
+            <Link
+              href="/session/new"
+              className="liquid-glass rounded-full px-12 py-4 text-base text-foreground transition-transform hover:scale-[1.03] sm:px-14 sm:py-5"
+            >
+              Start a session
+            </Link>
+            <Link
+              href="/auth/sign-up"
+              className="rounded-full border border-white/20 bg-black/20 px-5 py-2 text-sm font-medium text-foreground/90 underline-offset-4 backdrop-blur-sm transition-colors hover:text-foreground hover:underline"
+            >
+              Create account
+            </Link>
           </div>
         </div>
+      </section>
 
-        <div className="mt-12 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="rounded-lg border border-emerald-100 bg-white p-5 shadow-[0_1px_8px_rgba(15,23,42,0.04)]">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Active session</p>
-                <h2 className="mt-1 font-heading text-2xl font-semibold text-emerald-950">
-                  CS 225 MP debugging
-                </h2>
-              </div>
-              <span className="rounded-full bg-primary px-3 py-1 text-sm font-semibold text-primary-foreground">
-                42m
-              </span>
+      <section
+        id="product"
+        className="relative z-20 -mt-40 px-5 pb-20 sm:px-8 lg:pb-28"
+      >
+        <div className="mx-auto grid max-w-7xl gap-5 rounded-lg border border-emerald-100 bg-[linear-gradient(180deg,#f0fdf4_0%,#ffffff_34%,#ffffff_100%)] p-5 shadow-[0_20px_80px_rgba(6,78,59,0.14)] sm:p-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-sm font-medium text-primary">Sessio dashboard</p>
+              <h2
+                className="mt-2 text-3xl font-normal text-emerald-950 sm:text-4xl"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                See the week you actually showed up.
+              </h2>
             </div>
-            <div className="mt-5 grid gap-4 sm:grid-cols-[120px_1fr] sm:items-center">
-              <div className="flex h-28 w-28 items-center justify-center rounded-full border-8 border-primary/80 text-lg font-bold text-emerald-950">
-                78%
-              </div>
-              <div>
-                <p className="font-medium text-emerald-950">Grainger Level 2</p>
-                <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                  Goal checked, notes summarized, ready for the group feed.
-                </p>
-              </div>
-            </div>
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              {previewStats.map((stat) => {
-                const Icon = stat.icon;
-                return (
-                  <div
-                    key={stat.label}
-                    className="rounded-lg border border-border bg-emerald-50/60 p-4"
-                  >
-                    <Icon className="h-5 w-5 text-primary" />
-                    <p className="mt-3 text-xl font-semibold text-emerald-950">
-                      {stat.value}
-                    </p>
-                    <p className="text-sm text-muted-foreground">{stat.label}</p>
-                  </div>
-                );
-              })}
+            <div className="flex items-center gap-3 rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-medium text-emerald-900">
+              <Flame className="h-4 w-4 fill-emerald-500 text-emerald-600" />
+              4-day streak
             </div>
           </div>
 
-          <div className="grid gap-4">
-            <div className="rounded-lg border border-emerald-100 bg-white p-5 shadow-[0_1px_8px_rgba(15,23,42,0.04)]">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <Users className="h-5 w-5 text-primary" />
-                  <span className="font-medium text-emerald-950">
-                    CS Grind Squad
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {kpis.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={item.label}
+                  className="rounded-lg border border-border/70 bg-white p-6 shadow-[0_1px_6px_rgba(15,23,42,0.03)]"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-[13px] font-medium text-muted-foreground">
+                        {item.label}
+                      </p>
+                      <p className="mt-3 text-2xl font-semibold text-emerald-950">
+                        {item.value}
+                      </p>
+                    </div>
+                    <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-primary">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                  </div>
+                  <p className="mt-5 inline-flex items-center gap-1 text-xs font-medium text-emerald-700">
+                    <TrendingUp className="h-3.5 w-3.5" />
+                    {item.delta}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="rounded-lg border border-border/70 bg-white p-6 shadow-[0_1px_6px_rgba(15,23,42,0.03)] sm:p-8">
+            <div className="flex items-center justify-between gap-4">
+              <h3 className="text-xl font-semibold text-emerald-950">
+                Weekly Focus
+              </h3>
+              <span className="text-sm text-muted-foreground">
+                Last 7 days
+              </span>
+            </div>
+            <div className="mt-8 flex h-64 items-end gap-3 border-b border-l border-border/70 px-2 pb-4 sm:gap-5">
+              {weeklyBars.map((bar) => (
+                <div
+                  key={bar.label}
+                  className="flex h-full flex-1 flex-col justify-end gap-3"
+                >
+                  <div
+                    className="rounded-t-lg bg-primary"
+                    style={{ height: bar.height }}
+                  />
+                  <span className="text-center text-xs text-muted-foreground">
+                    {bar.label}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Star className="h-4 w-4 fill-amber-400 text-amber-500" />
-                  12 gold stars
-                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_420px]">
+            <div className="rounded-lg border border-border/70 bg-white p-6 shadow-[0_1px_6px_rgba(15,23,42,0.03)] sm:p-8">
+              <h3 className="text-xl font-semibold text-emerald-950">
+                Focus by Spot
+              </h3>
+              <div className="mt-7 grid gap-5">
+                {spotScores.map((spot) => (
+                  <div key={spot.name} className="grid gap-2">
+                    <div className="flex items-center justify-between gap-3 text-sm">
+                      <span className="font-medium text-emerald-950">
+                        {spot.name}
+                      </span>
+                      <span className="text-muted-foreground">
+                        {spot.score}% goals hit
+                      </span>
+                    </div>
+                    <div className="h-3 overflow-hidden rounded-full bg-emerald-50">
+                      <div
+                        className="h-full rounded-full bg-primary"
+                        style={{ width: `${spot.score}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="rounded-lg border border-emerald-100 bg-white p-5 shadow-[0_1px_8px_rgba(15,23,42,0.04)]">
-              <p className="text-sm font-medium text-emerald-900">
-                Campus heat
+
+            <div className="rounded-lg border border-border/70 bg-white p-6 shadow-[0_1px_6px_rgba(15,23,42,0.03)] sm:p-8">
+              <h3 className="text-xl font-semibold text-emerald-950">
+                Top Spots
+              </h3>
+              <div className="mt-4 grid">
+                {topSpots.map((spot, index) => (
+                  <div
+                    key={spot.name}
+                    className="flex items-center justify-between gap-4 border-b border-border/70 py-4 last:border-b-0"
+                  >
+                    <div className="flex min-w-0 items-center gap-4">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-sm font-semibold text-emerald-800">
+                        {index + 1}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate font-medium text-emerald-950">
+                          {spot.name}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {spot.total} total
+                        </p>
+                      </div>
+                    </div>
+                    <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800">
+                      {spot.score}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-border/70 bg-white p-6 shadow-[0_1px_6px_rgba(15,23,42,0.03)] sm:p-8">
+            <div className="flex items-center justify-between gap-4">
+              <h3 className="text-xl font-semibold text-emerald-950">
+                Recent Sessions
+              </h3>
+              <Link
+                href="/feed"
+                className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+              >
+                View feed
+              </Link>
+            </div>
+            <div className="mt-4 grid">
+              {recentSessions.map((session) => (
+                <div
+                  key={session.title}
+                  className="flex flex-col gap-3 border-b border-border/70 py-4 last:border-b-0 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="flex min-w-0 items-center gap-4">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-sm font-semibold text-white">
+                      SE
+                    </span>
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold text-emerald-950">
+                        {session.title}
+                      </p>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {session.duration} at {session.spot}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+                    {session.dnd ? (
+                      <span className="rounded-full border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground">
+                        DND
+                      </span>
+                    ) : null}
+                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800">
+                      <CheckCircle2 className="h-3 w-3" />
+                      {session.score}
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+                      <Star className="h-4 w-4 fill-amber-400 text-amber-500" />
+                      Gold stars
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3" id="contact">
+            <Link
+              href="/spots"
+              className="focus-ring rounded-lg border border-emerald-100 bg-emerald-50 p-5 transition hover:border-primary"
+            >
+              <MapPinned className="h-5 w-5 text-primary" />
+              <p className="mt-3 font-semibold text-emerald-950">
+                Map study spots
               </p>
-              <div className="mt-4 h-36 rounded-lg border border-emerald-100 bg-[linear-gradient(135deg,#ecfdf5_0%,#ffffff_52%,#dcfce7_100%)] p-4">
-                <div className="relative h-full">
-                  <span className="absolute left-[18%] top-[42%] h-5 w-5 rounded-full bg-emerald-500/60 ring-4 ring-emerald-200" />
-                  <span className="absolute left-[55%] top-[24%] h-9 w-9 rounded-full bg-emerald-600/70 ring-4 ring-emerald-200" />
-                  <span className="absolute left-[72%] top-[62%] h-7 w-7 rounded-full bg-emerald-500/50 ring-4 ring-emerald-100" />
-                </div>
-              </div>
-            </div>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Search Illini locations and see where sessions are heating up.
+              </p>
+            </Link>
+            <Link
+              href="/groups"
+              className="focus-ring rounded-lg border border-emerald-100 bg-emerald-50 p-5 transition hover:border-primary"
+            >
+              <Users className="h-5 w-5 text-primary" />
+              <p className="mt-3 font-semibold text-emerald-950">
+                Stay accountable
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Share public focus blocks with friends and study groups.
+              </p>
+            </Link>
+            <Link
+              href="/auth/sign-up"
+              className="focus-ring rounded-lg border border-emerald-100 bg-emerald-50 p-5 transition hover:border-primary"
+            >
+              <Flame className="h-5 w-5 text-primary" />
+              <p className="mt-3 font-semibold text-emerald-950">
+                Start your streak
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Create a profile and log your first focused block.
+              </p>
+            </Link>
           </div>
         </div>
       </section>
