@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatDuration } from "@/lib/utils/streak";
 import { CheckCircle2, Clock3, MapPinned, Sparkles, Star } from "lucide-react";
+import Link from "next/link";
 
 type SessionCardProps = {
   title: string;
@@ -15,6 +16,7 @@ type SessionCardProps = {
   actorName?: string | null;
   actorUsername?: string | null;
   actorAvatarUrl?: string | null;
+  actorHref?: string | null;
   goldStarsCount?: number;
   distractionFree?: boolean | null;
   action?: React.ReactNode;
@@ -31,26 +33,34 @@ export function SessionCard({
   actorName,
   actorUsername,
   actorAvatarUrl,
+  actorHref,
   goldStarsCount,
   distractionFree,
   action,
 }: SessionCardProps) {
+  const actorBlock = actorName ? (
+    <div className="mb-1 flex items-center gap-2 text-sm text-muted-foreground">
+      <UserAvatar
+        name={actorName}
+        username={actorUsername}
+        avatarUrl={actorAvatarUrl}
+        size="sm"
+      />
+      {actorName}
+    </div>
+  ) : null;
   return (
     <Card className="sessio-card">
       <CardContent className="grid gap-4 p-5">
         <div className="flex items-start justify-between gap-4">
           <div>
-            {actorName ? (
-              <div className="mb-1 flex items-center gap-2 text-sm text-muted-foreground">
-                <UserAvatar
-                  name={actorName}
-                  username={actorUsername}
-                  avatarUrl={actorAvatarUrl}
-                  size="sm"
-                />
-                {actorName}
-              </div>
-            ) : null}
+            {actorBlock && actorHref ? (
+              <Link href={actorHref} className="focus-ring inline-block rounded">
+                {actorBlock}
+              </Link>
+            ) : (
+              actorBlock
+            )}
             <h3 className="mt-1 text-lg font-semibold">{title}</h3>
           </div>
           {action}

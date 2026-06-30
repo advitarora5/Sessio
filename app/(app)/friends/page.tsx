@@ -100,6 +100,7 @@ export default async function FriendsPage() {
       startedAt: session.start_time,
       goalCompleted: session.goal_completed,
       summary: session.summary_ai,
+      actorId: session.user_id,
       actorName: profile?.full_name ?? profile?.username ?? "Sessio friend",
       actorUsername: profile?.username ?? null,
       actorAvatarUrl: profile?.avatar_url ?? null,

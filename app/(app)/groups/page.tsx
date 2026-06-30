@@ -1,15 +1,38 @@
 import { GroupsManager } from "@/components/groups/GroupsManager";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
 export default async function GroupsPage() {
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/auth/login");
+  }
+
   const weekAgo = new Date();
   weekAgo.setDate(weekAgo.getDate() - 7);
 
-  const { data: groups } = await supabase
-    .from("groups")
-    .select("id, name, invite_code")
-    .order("created_at", { ascending: false });
+  const { data: memberships } = await supabase
+    .from("group_members")
+    .select("group_id")
+    .eq("user_id", user.id);
+  const memberGroupIds = (memberships ?? []).map((membership) => membership.group_id);
+
+  // invite_code is column-locked from the authenticated role (see
+  // 20260630193000_groups_overhaul.sql), so confirmed members fetch it via
+  // the service client rather than the RLS-scoped one used above.
+  const service = createServiceClient();
+  const { data: groups } =
+    memberGroupIds.length > 0
+      ? await service
+          .from("groups")
+          .select("id, name, invite_code")
+          .in("id", memberGroupIds)
+          .order("created_at", { ascending: false })
+      : { data: [] };
   const groupIds = (groups ?? []).map((group) => group.id);
   const { data: sessions } =
     groupIds.length > 0

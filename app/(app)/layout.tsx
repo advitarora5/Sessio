@@ -23,9 +23,9 @@ export default async function AuthenticatedAppLayout({
 
   return (
     <AppShell>
-      <Header />
+      <Header user={user} />
       <div className="mx-auto flex max-w-7xl">
-        <Sidebar />
+        <Sidebar user={user} />
         <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
     </AppShell>

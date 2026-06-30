@@ -30,6 +30,14 @@ export type TopSpot = {
   goalRate: number;
 };
 
+export type RecentSpot = {
+  id: number;
+  name: string;
+  area: string | null;
+  lastSessionAt: string;
+  sessions: number;
+};
+
 function dateKey(date: Date) {
   return [
     date.getFullYear(),
@@ -145,5 +153,60 @@ export function computeTopSpots(
           : 0,
     }))
     .sort((a, b) => b.totalMinutes - a.totalMinutes)
+    .slice(0, limit);
+}
+
+export function computeRecentSpots(
+  sessions: AnalyticsSession[],
+  limit = 5,
+): RecentSpot[] {
+  const bySpot = new Map<number, RecentSpot>();
+
+  sessions.forEach((session) => {
+    if (!session.spot_id || !session.spots) {
+      return;
+    }
+
+    const existing = bySpot.get(session.spot_id);
+
+    if (!existing) {
+      bySpot.set(session.spot_id, {
+        id: session.spot_id,
+        name: session.spots.name,
+        area: session.spots.area,
+        lastSessionAt: session.start_time,
+        sessions: 1,
+      });
+      return;
+    }
+
+    existing.sessions += 1;
+    if (new Date(session.start_time) > new Date(existing.lastSessionAt)) {
+      existing.lastSessionAt = session.start_time;
+    }
+  });
+
+  return Array.from(bySpot.values())
+    .sort(
+      (a, b) =>
+        new Date(b.lastSessionAt).getTime() - new Date(a.lastSessionAt).getTime(),
+    )
+    .slice(0, limit);
+}
+
+export function computeBestSessions(
+  sessions: AnalyticsSession[],
+  limit = 5,
+): AnalyticsSession[] {
+  return [...sessions]
+    .sort((a, b) => {
+      const durationDiff = (b.duration_minutes ?? 0) - (a.duration_minutes ?? 0);
+      if (durationDiff !== 0) return durationDiff;
+
+      const goalDiff = Number(b.goal_completed ?? false) - Number(a.goal_completed ?? false);
+      if (goalDiff !== 0) return goalDiff;
+
+      return new Date(b.start_time).getTime() - new Date(a.start_time).getTime();
+    })
     .slice(0, limit);
 }

@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UsersRound, UserPlus } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -32,6 +33,7 @@ type FriendFeedSession = {
   startedAt: string;
   goalCompleted: boolean | null;
   summary: string | null;
+  actorId: string;
   actorName: string;
   actorUsername: string | null;
   actorAvatarUrl: string | null;
@@ -117,7 +119,10 @@ export function FriendsManager({
                   key={friend.id}
                   className="flex items-center justify-between rounded-lg border border-border bg-card p-3"
                 >
-                  <div className="flex items-center gap-3">
+                  <Link
+                    href={`/friends/${friend.profile.id}`}
+                    className="focus-ring flex items-center gap-3 rounded"
+                  >
                     <UserAvatar
                       name={friend.profile.full_name}
                       username={friend.profile.username}
@@ -129,7 +134,7 @@ export function FriendsManager({
                         @{friend.profile.username ?? friend.profile.id.slice(0, 8)}
                       </p>
                     </div>
-                  </div>
+                  </Link>
                   <Button
                     size="sm"
                     variant="outline"
@@ -161,6 +166,7 @@ export function FriendsManager({
                   actorName={session.actorName}
                   actorUsername={session.actorUsername}
                   actorAvatarUrl={session.actorAvatarUrl}
+                  actorHref={`/friends/${session.actorId}`}
                   category={session.category}
                   durationMinutes={session.durationMinutes}
                   spotName={session.spotName}

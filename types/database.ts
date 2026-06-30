@@ -92,6 +92,9 @@ export type Database = {
           name: string;
           owner_id: string;
           invite_code: string;
+          visibility: "public" | "private";
+          password_hash: string | null;
+          course: string | null;
           created_at: string;
         };
         Insert: {
@@ -99,6 +102,9 @@ export type Database = {
           name: string;
           owner_id: string;
           invite_code: string;
+          visibility?: "public" | "private";
+          password_hash?: string | null;
+          course?: string | null;
           created_at?: string;
         };
         Update: {
@@ -106,6 +112,9 @@ export type Database = {
           name?: string;
           owner_id?: string;
           invite_code?: string;
+          visibility?: "public" | "private";
+          password_hash?: string | null;
+          course?: string | null;
           created_at?: string;
         };
         Relationships: [
@@ -351,7 +360,12 @@ export type Database = {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      is_group_member: {
+        Args: { p_group_id: number };
+        Returns: boolean;
+      };
+    };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
   };

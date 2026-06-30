@@ -1,4 +1,5 @@
 import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { hashPassword } from "@/lib/utils/password";
 import { NextResponse, type NextRequest } from "next/server";
 
 function makeInviteCode() {
@@ -15,11 +16,30 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = (await request.json().catch(() => null)) as { name?: string } | null;
+  const body = (await request.json().catch(() => null)) as {
+    name?: string;
+    visibility?: "public" | "private";
+    password?: string;
+    course?: string;
+  } | null;
   const name = body?.name?.trim();
+  const visibility = body?.visibility === "private" ? "private" : "public";
+  const course = body?.course?.trim() || null;
 
   if (!name) {
     return NextResponse.json({ error: "Group name is required." }, { status: 400 });
+  }
+
+  let passwordHash: string | null = null;
+  if (visibility === "private") {
+    const password = body?.password ?? "";
+    if (password.length < 6) {
+      return NextResponse.json(
+        { error: "Private groups need a password of at least 6 characters." },
+        { status: 400 },
+      );
+    }
+    passwordHash = await hashPassword(password);
   }
 
   const service = createServiceClient();
@@ -35,8 +55,11 @@ export async function POST(request: NextRequest) {
       name,
       owner_id: user.id,
       invite_code: makeInviteCode(),
+      visibility,
+      password_hash: passwordHash,
+      course,
     })
-    .select("id, name, invite_code")
+    .select("id, name, visibility, course")
     .single();
 
   if (groupError || !group) {

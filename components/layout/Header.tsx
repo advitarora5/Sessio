@@ -5,21 +5,23 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { Sparkles } from "lucide-react";
 import Link from "next/link";
+import type { User } from "@supabase/supabase-js";
 
-export async function Header() {
+type HeaderProps = {
+  user: User;
+};
+
+export async function Header({ user }: HeaderProps) {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
   const { data: profile } = await supabase
     .from("profiles")
     .select("full_name, username, avatar_url")
-    .eq("id", user?.id ?? "")
+    .eq("id", user.id)
     .maybeSingle();
   const displayName =
     profile?.full_name ??
-    user?.user_metadata?.full_name ??
-    user?.email?.split("@")[0] ??
+    user.user_metadata?.full_name ??
+    user.email?.split("@")[0] ??
     "Focus";
 
   return (
