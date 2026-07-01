@@ -4,16 +4,10 @@ import { SessioLogo } from "@/components/brand/SessioLogo";
 import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
 
+import { HeaderNav } from "@/components/layout/HeaderNav";
+
 const videoSrc =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4";
-
-const navLinks = [
-  { label: "Dashboard", href: "/dashboard" },
-  { label: "Spots", href: "/spots" },
-  { label: "Groups", href: "/groups" },
-  { label: "About", href: "#product" },
-  { label: "Contact", href: "mailto:hello@sessio.app" },
-];
 
 const easeOutExpo: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -46,16 +40,8 @@ export function OpeningHero() {
           <SessioLogo variant="white" wordmarkClassName="text-2xl" />
         </Link>
 
-        <div className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className="text-sm text-slate-200 transition-colors hover:text-white"
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div className="hidden lg:block">
+          <HeaderNav />
         </div>
 
         <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
