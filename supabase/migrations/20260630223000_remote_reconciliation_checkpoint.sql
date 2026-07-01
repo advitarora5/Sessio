@@ -1,9 +1,0 @@
--- Reconciliation: this version was already applied directly to the remote
--- database (outside this migrations folder) before being captured here.
--- A full column-level schema diff against the live database (public schema)
--- found no detectable difference beyond what 20260630205500 already
--- captures. This file is a documented no-op kept only so the local
--- migration history stays linear and matches the remote ledger; if this
--- version did make additional changes not visible to schema introspection
--- (e.g. a policy or function tweak), they were not identified and may need
--- a follow-up migration once confirmed.
