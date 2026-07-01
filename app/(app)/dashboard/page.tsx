@@ -132,6 +132,7 @@ export default async function DashboardPage() {
     { data: allTimeRows },
     { data: friendships },
     { data: groups },
+    { data: pendingInvitesRows }
   ] = await Promise.all([
     supabase
       .from("sessions")
@@ -162,6 +163,11 @@ export default async function DashboardPage() {
       .select("id, name, invite_code")
       .order("name")
       .limit(6),
+    supabase
+      .from("event_rsvps")
+      .select("id, event_id, status, calendar_events(*)")
+      .eq("user_id", userId)
+      .eq("status", "pending")
   ]);
 
   const completedSessions = (sessions ?? []) as AnalyticsSession[];
@@ -216,6 +222,8 @@ export default async function DashboardPage() {
       avatarUrl: row.avatar_url,
       meta: [row.major, row.role].filter(Boolean).join(" · ") || null,
     }));
+
+  const pendingInvites = pendingInvitesRows ?? [];
 
   const feedItems: DashboardFeedItem[] = (feedRows ?? [])
     .filter((row) => row.visibility === "public" || row.user_id === userId)
@@ -361,13 +369,35 @@ export default async function DashboardPage() {
         <section className="grid min-w-0 gap-3">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-[#0F223A]">Activity feed</h2>
-            <Link
-              href="/feed"
-              className="text-sm font-medium text-[#0F223A] underline-offset-4 hover:underline"
-            >
-              View all
-            </Link>
+            <div className="flex items-center gap-4">
+              <form action="/api/focus-mode" method="POST">
+                <button type="submit" className="text-sm font-medium bg-[#0F223A] text-white px-4 py-1.5 rounded-full hover:bg-[#0F223A]/90 transition">
+                  Go Deep
+                </button>
+              </form>
+              <Link
+                href="/feed"
+                className="text-sm font-medium text-[#0F223A] underline-offset-4 hover:underline"
+              >
+                View all
+              </Link>
+            </div>
           </div>
+          
+          {pendingInvites && pendingInvites.length > 0 && (
+            <Card className="border-amber-200 bg-amber-50 shadow-sm mb-4">
+              <CardContent className="p-4 flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-amber-900">Pending Invites ({pendingInvites.length})</h3>
+                  <p className="text-sm text-amber-800">You have study session invites waiting.</p>
+                </div>
+                <Link href="/calendar" className="text-sm font-medium bg-amber-200 text-amber-900 px-4 py-2 rounded-full hover:bg-amber-300">
+                  Review
+                </Link>
+              </CardContent>
+            </Card>
+          )}
+
           <StravaFeed items={feedItems} currentUserId={userId} />
         </section>
       </div>

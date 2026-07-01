@@ -22,8 +22,7 @@ export function ProfileForm({ userId, profile }: ProfileFormProps) {
   const [username, setUsername] = useState(profile?.username ?? "");
   const [major, setMajor] = useState(profile?.major ?? "");
   const [year, setYear] = useState(profile?.year ?? "");
-  const [studyFocus, setStudyFocus] = useState(profile?.study_focus ?? "");
-  const [role, setRole] = useState(profile?.role ?? "STUDENT");
+  const [role, setRole] = useState(profile?.role ?? "Student");
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url ?? "");
   const [message, setMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -41,8 +40,7 @@ export function ProfileForm({ userId, profile }: ProfileFormProps) {
       username: username.trim() || null,
       major: major.trim() || null,
       year: year.trim() || null,
-      study_focus: studyFocus.trim() || null,
-      role: role.trim().toUpperCase() || "STUDENT",
+      role: role.trim() || null,
       avatar_url: avatarUrl.trim() || null,
     });
 
@@ -164,21 +162,16 @@ export function ProfileForm({ userId, profile }: ProfileFormProps) {
           <div className="grid gap-2 sm:grid-cols-2">
             <div className="grid gap-2">
               <Label htmlFor="role">Role</Label>
-              <Input
+              <select
                 id="role"
                 value={role}
-                onChange={(event) => setRole(event.target.value.toUpperCase())}
-                placeholder="STUDENT"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="study-focus">Study focus</Label>
-              <Input
-                id="study-focus"
-                value={studyFocus}
-                onChange={(event) => setStudyFocus(event.target.value)}
-                placeholder="Systems, research, MCAT..."
-              />
+                onChange={(event) => setRole(event.target.value)}
+                className="focus-ring h-9 rounded-md border border-input bg-white px-3 text-sm text-card-foreground"
+              >
+                <option value="Student">Student</option>
+                <option value="Faculty">Faculty</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
           </div>
           <div className="grid gap-4 rounded-lg border border-border bg-muted/20 p-4 sm:grid-cols-[auto_1fr] sm:items-center">

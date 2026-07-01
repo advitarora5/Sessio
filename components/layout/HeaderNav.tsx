@@ -11,6 +11,7 @@ export const navItems = [
   { href: "/heatmap", label: "Heatmap" },
   { href: "/leaderboard", label: "Leaderboard" },
   { href: "/groups", label: "Groups" },
+  { href: "/calendar", label: "Calendar" },
   { href: "/friends", label: "Friends" },
   { href: "/feed", label: "Feed" },
 ];

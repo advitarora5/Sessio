@@ -23,7 +23,7 @@ export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
   const [username, setUsername] = useState(profile?.username ?? "");
   const [major, setMajor] = useState(profile?.major ?? "");
   const [year, setYear] = useState(profile?.year ?? "");
-  const [role, setRole] = useState(profile?.role ?? "");
+  const [role, setRole] = useState(profile?.role ?? "Student");
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -39,7 +39,7 @@ export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
       username: username.trim().toLowerCase().replace(/[^a-z0-9_]/g, '') || null,
       major: major.trim() || null,
       year: year.trim() || null,
-      role: role || null,
+      role: role.trim() || null,
       avatar_url: profile?.avatar_url ?? null,
     });
 
@@ -120,7 +120,7 @@ export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
               value={role}
               onChange={(event) => setRole(event.target.value)}
               required
-              className="focus-ring h-10 rounded-md border border-input bg-background px-3 text-sm"
+              className="focus-ring h-10 rounded-md border border-input bg-white px-3 text-sm text-card-foreground"
             >
               <option value="">Select role</option>
               {roleOptions.map((option) => (
