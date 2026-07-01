@@ -62,7 +62,7 @@ export function SignUpForm({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/dashboard`,
+          emailRedirectTo: `${window.location.origin}/auth/confirm?next=/feed`,
           data: profilePayload,
         },
       });
@@ -174,7 +174,7 @@ export function SignUpForm({
                     required
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
-                    className="focus-ring h-10 rounded-md border border-input bg-background px-3 text-sm"
+                    className="focus-ring h-10 rounded-md border border-input bg-white px-3 text-sm text-card-foreground"
                   >
                     <option value="">Select role</option>
                     {roleOptions.map((option) => (

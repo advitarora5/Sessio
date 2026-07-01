@@ -30,5 +30,11 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "illinispots"]
+  "exclude": [
+    "node_modules",
+    "illinispots",
+    "tests",
+    "vitest.config.mts",
+    "vitest.setup.ts"
+  ]
 }

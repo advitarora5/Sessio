@@ -61,8 +61,8 @@ export function LeaderboardTabs({ participants, sessions }: LeaderboardTabsProps
             onClick={() => setPeriod(p)}
             className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
               period === p
-                ? "bg-foreground text-background"
-                : "bg-muted text-muted-foreground hover:text-foreground"
+                ? "bg-[#0F223A] text-white"
+                : "bg-slate-100 text-slate-600 hover:text-[#0F223A]"
             }`}
           >
             {p === "week" ? "This Week" : "This Month"}
@@ -71,15 +71,15 @@ export function LeaderboardTabs({ participants, sessions }: LeaderboardTabsProps
       </div>
 
       {/* Category tabs */}
-      <div className="flex gap-1 rounded-lg bg-muted p-1">
+      <div className="flex gap-1 rounded-lg bg-slate-100 p-1">
         {CATEGORIES.map((c) => (
           <button
             key={c.key}
             onClick={() => setCategory(c.key)}
             className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition ${
               category === c.key
-                ? "bg-card text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-white text-[#0F223A] shadow-sm"
+                : "text-slate-600 hover:text-[#0F223A]"
             }`}
           >
             {c.label}

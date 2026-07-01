@@ -32,9 +32,12 @@ export function ForgotPasswordForm({
     setError(null);
 
     try {
-      // The url which will be included in the email. This URL needs to be configured in your redirect URLs in the Supabase dashboard at https://supabase.com/dashboard/project/_/auth/url-configuration
+      // Land on /auth/confirm first so the recovery code/token is exchanged for
+      // a real session *before* the user reaches the update-password form.
+      // Both this URL and its `next` target must be listed under Redirect URLs
+      // in the Supabase dashboard (Auth -> URL Configuration).
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/update-password`,
+        redirectTo: `${window.location.origin}/auth/confirm?next=/auth/update-password`,
       });
       if (error) throw error;
       setSuccess(true);

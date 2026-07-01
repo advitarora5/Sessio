@@ -1,6 +1,7 @@
 import { ProfileForm } from "@/components/profile/ProfileForm";
 import { StreakBadge } from "@/components/profile/StreakBadge";
 import { UserAvatar } from "@/components/profile/UserAvatar";
+import { ActivityList, type OwnActivity } from "@/components/session/ActivityList";
 import { Card, CardContent } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 import { computeStreak, formatDuration } from "@/lib/utils/streak";
@@ -22,12 +23,24 @@ export default async function ProfilePage() {
         .maybeSingle(),
       supabase
         .from("sessions")
-        .select("id, start_time, status, duration_minutes")
+        .select(
+          "id, title, category, start_time, status, duration_minutes, goal_completed, spots(name)",
+        )
         .eq("user_id", user?.id ?? "")
         .eq("status", "completed")
         .order("start_time", { ascending: false }),
       supabase.from("groups").select("id, name, invite_code").order("name"),
     ]);
+
+  const activities: OwnActivity[] = (sessions ?? []).map((session) => ({
+    id: session.id,
+    title: session.title ?? "Focus session",
+    category: session.category,
+    startedAt: session.start_time,
+    durationMinutes: session.duration_minutes,
+    spotName: session.spots?.name ?? null,
+    goalCompleted: session.goal_completed,
+  }));
 
   const totalMinutes = (sessions ?? []).reduce(
     (sum, session) => sum + (session.duration_minutes ?? 0),
@@ -92,6 +105,19 @@ export default async function ProfilePage() {
             <p className="text-sm text-muted-foreground">groups joined</p>
           </CardContent>
         </Card>
+      </section>
+
+      <section className="grid gap-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-semibold text-[#0F223A]">Your activities</h2>
+          <Link
+            href="/session/new"
+            className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+          >
+            Start a session
+          </Link>
+        </div>
+        <ActivityList activities={activities} />
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[1fr_360px]">

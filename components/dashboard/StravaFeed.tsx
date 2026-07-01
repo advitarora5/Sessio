@@ -14,6 +14,7 @@ import {
   Share2,
   ShieldCheck,
   Star,
+  Trash2,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -86,6 +87,23 @@ export function StravaFeed({ items, currentUserId }: StravaFeedProps) {
           : entry,
       ),
     );
+    setBusyId(null);
+  }
+
+  async function deleteSession(item: DashboardFeedItem) {
+    if (!window.confirm("Delete this activity? This cannot be undone.")) {
+      return;
+    }
+    setBusyId(item.id);
+    const supabase = createClient();
+    // Owner-only in the UI; RLS enforces it at the DB layer regardless.
+    const { error } = await supabase
+      .from("sessions")
+      .delete()
+      .eq("id", item.id);
+    if (!error) {
+      setFeed((current) => current.filter((entry) => entry.id !== item.id));
+    }
     setBusyId(null);
   }
 
@@ -234,6 +252,17 @@ export function StravaFeed({ items, currentUserId }: StravaFeedProps) {
                 <Share2 className="h-4 w-4" />
                 {copiedId === item.id ? "Copied" : "Share"}
               </button>
+              {item.isOwn ? (
+                <button
+                  type="button"
+                  onClick={() => deleteSession(item)}
+                  disabled={busyId === item.id}
+                  aria-label="Delete your activity"
+                  className="focus-ring inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium text-slate-500 transition hover:bg-red-50 hover:text-red-600"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              ) : null}
             </footer>
           </motion.article>
         ))}

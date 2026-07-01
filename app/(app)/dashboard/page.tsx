@@ -124,7 +124,15 @@ export default async function DashboardPage() {
   const since = new Date(previousStart);
   since.setDate(since.getDate() - 16);
 
-  const service = createServiceClient();
+  // Prefer the service client for cross-user feed/suggestions, but never let a
+  // missing service-role env var take down the whole dashboard — fall back to
+  // the RLS-bound client so the viewer still sees their own data.
+  let service = supabase;
+  try {
+    service = createServiceClient();
+  } catch {
+    service = supabase;
+  }
 
   const [
     { data: sessions },
