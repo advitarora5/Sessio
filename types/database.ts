@@ -361,6 +361,99 @@ export type Database = {
           },
         ];
       };
+      calendar_events: {
+        Row: {
+          id: number;
+          user_id: string;
+          title: string;
+          start_time: string;
+          end_time: string;
+          visibility: string;
+          is_busy_mask: boolean;
+          location: string | null;
+          group_id: number | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: number;
+          user_id: string;
+          title: string;
+          start_time: string;
+          end_time: string;
+          visibility?: string;
+          is_busy_mask?: boolean;
+          location?: string | null;
+          group_id?: number | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: number;
+          user_id?: string;
+          title?: string;
+          start_time?: string;
+          end_time?: string;
+          visibility?: string;
+          is_busy_mask?: boolean;
+          location?: string | null;
+          group_id?: number | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "calendar_events_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "calendar_events_group_id_fkey";
+            columns: ["group_id"];
+            isOneToOne: false;
+            referencedRelation: "groups";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      event_rsvps: {
+        Row: {
+          id: number;
+          event_id: number;
+          user_id: string;
+          status: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: number;
+          event_id: number;
+          user_id: string;
+          status?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: number;
+          event_id?: number;
+          user_id?: string;
+          status?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "event_rsvps_event_id_fkey";
+            columns: ["event_id"];
+            isOneToOne: false;
+            referencedRelation: "calendar_events";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "event_rsvps_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: {

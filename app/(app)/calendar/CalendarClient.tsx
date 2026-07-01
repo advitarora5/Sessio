@@ -166,7 +166,7 @@ export function CalendarClient({
   const handleDeleteEvent = async (e: React.MouseEvent, eventId: string) => {
     e.stopPropagation();
     try {
-      const { error } = await supabase.from("calendar_events").delete().eq("id", eventId);
+      const { error } = await supabase.from("calendar_events").delete().eq("id", Number(eventId));
       if (error) throw error;
       setEvents(prev => prev.filter(ev => ev.id !== eventId));
       showToast("Event deleted.");

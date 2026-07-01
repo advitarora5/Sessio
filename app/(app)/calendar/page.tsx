@@ -82,11 +82,23 @@ export default async function CalendarPage() {
       </div>
       
       <CalendarClient 
-        initialEvents={events ?? []} 
+        initialEvents={(events ?? []).map((e) => ({
+          ...e,
+          id: String(e.id),
+          location: e.location ?? undefined,
+        }))} 
         userId={user.id} 
-        friends={friendsData ?? []}
-        groups={groups ?? []}
-        spots={spots ?? []}
+        friends={(friendsData ?? []).map((f) => ({
+          id: f.id,
+          username: f.username ?? "",
+          full_name: f.full_name ?? "",
+        }))}
+        groups={(groups ?? []).map((g) => ({ id: String(g.id), name: g.name }))}
+        spots={(spots ?? []).map((s) => ({
+          id: s.id,
+          name: s.name,
+          building: s.area ?? "",
+        }))}
         pendingInvites={pendingInvites ?? []}
       />
     </div>
