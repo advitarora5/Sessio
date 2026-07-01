@@ -81,7 +81,7 @@ export default async function FriendsPage() {
     acceptedFriendIds.length > 0
       ? await service
           .from("sessions")
-          .select("id, user_id, title, category, start_time, duration_minutes, distraction_free, goal_completed, summary_ai, spots(name)")
+          .select("id, user_id, title, category, start_time, duration_minutes, distraction_free, goal_completed, summary_ai, media_url, spots(name)")
           .in("user_id", acceptedFriendIds)
           .eq("status", "completed")
           .eq("visibility", "public")
@@ -101,6 +101,7 @@ export default async function FriendsPage() {
       goalCompleted: session.goal_completed,
       summary: session.summary_ai,
       actorId: session.user_id,
+      mediaUrl: session.media_url,
       actorName: profile?.full_name ?? profile?.username ?? "Sessio friend",
       actorUsername: profile?.username ?? null,
       actorAvatarUrl: profile?.avatar_url ?? null,

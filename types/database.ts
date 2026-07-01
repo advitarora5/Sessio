@@ -183,6 +183,7 @@ export type Database = {
           goal_completed: boolean | null;
           notes: string | null;
           summary_ai: string | null;
+          media_url: string | null;
           visibility: "private" | "group" | "public";
           created_at: string;
         };
@@ -202,6 +203,7 @@ export type Database = {
           goal_completed?: boolean | null;
           notes?: string | null;
           summary_ai?: string | null;
+          media_url?: string | null;
           visibility?: "private" | "group" | "public";
           created_at?: string;
         };
@@ -221,6 +223,7 @@ export type Database = {
           goal_completed?: boolean | null;
           notes?: string | null;
           summary_ai?: string | null;
+          media_url?: string | null;
           visibility?: "private" | "group" | "public";
           created_at?: string;
         };

@@ -101,7 +101,7 @@ export default async function GroupFeedPage({ params }: GroupFeedPageProps) {
   const { data: sessions } = await supabase
     .from("sessions")
     .select(
-      "id, user_id, title, category, start_time, duration_minutes, distraction_free, goal_completed, summary_ai, spots(name), likes(id, user_id)",
+      "id, user_id, title, category, start_time, duration_minutes, distraction_free, goal_completed, summary_ai, media_url, spots(name), likes(id, user_id)",
     )
     .eq("group_id", groupId)
     .eq("status", "completed")
@@ -131,6 +131,7 @@ export default async function GroupFeedPage({ params }: GroupFeedPageProps) {
       startedAt: session.start_time,
       goalCompleted: session.goal_completed,
       summary: session.summary_ai,
+      mediaUrl: session.media_url,
       actorName:
         profile?.full_name ?? profile?.username ?? `Member ${session.user_id.slice(0, 6)}`,
       actorUsername: profile?.username ?? null,

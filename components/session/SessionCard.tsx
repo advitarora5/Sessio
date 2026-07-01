@@ -13,6 +13,7 @@ type SessionCardProps = {
   startedAt?: string | null;
   goalCompleted?: boolean | null;
   summary?: string | null;
+  mediaUrl?: string | null;
   actorName?: string | null;
   actorUsername?: string | null;
   actorAvatarUrl?: string | null;
@@ -30,6 +31,7 @@ export function SessionCard({
   startedAt,
   goalCompleted,
   summary,
+  mediaUrl,
   actorName,
   actorUsername,
   actorAvatarUrl,
@@ -98,6 +100,28 @@ export function SessionCard({
             <Sparkles className="mr-2 inline h-4 w-4 text-primary" />
             {summary}
           </p>
+        ) : null}
+
+        {mediaUrl ? (
+          <div className="overflow-hidden rounded-lg border border-border/70">
+            {mediaUrl.match(/\.(mp4|webm|mov)$/i) ? (
+              <video
+                src={mediaUrl}
+                controls
+                className="w-full"
+                style={{ maxHeight: '500px' }}
+              >
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <img
+                src={mediaUrl}
+                alt="Session media"
+                className="w-full object-cover"
+                style={{ maxHeight: '500px' }}
+              />
+            )}
+          </div>
         ) : null}
 
         {typeof goldStarsCount === "number" ? (

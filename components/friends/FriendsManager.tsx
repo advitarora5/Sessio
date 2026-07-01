@@ -34,6 +34,7 @@ type FriendFeedSession = {
   goalCompleted: boolean | null;
   summary: string | null;
   actorId: string;
+  mediaUrl: string | null;
   actorName: string;
   actorUsername: string | null;
   actorAvatarUrl: string | null;
@@ -173,6 +174,7 @@ export function FriendsManager({
                   startedAt={session.startedAt}
                   goalCompleted={session.goalCompleted}
                   summary={session.summary}
+                  mediaUrl={session.mediaUrl}
                   distractionFree={session.distractionFree}
                 />
               ))
