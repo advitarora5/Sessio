@@ -3,7 +3,6 @@
 import { SpotCard } from "@/components/spots/SpotCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
 import { MapPin, Search, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import FacilityMap from "@/components/spots/FacilityMap";
@@ -28,20 +27,11 @@ function includesQuery(value: string | null | undefined, query: string) {
   return value?.toLowerCase().includes(query) ?? false;
 }
 
-function normalize(value: number, min: number, max: number) {
-  if (max === min) {
-    return 50;
-  }
-
-  return ((value - min) / (max - min)) * 82 + 9;
-}
-
 export function SpotExplorer({ spots }: SpotExplorerProps) {
   const [query, setQuery] = useState("");
   const [highlightedId, setHighlightedId] = useState<number | null>(null);
   const normalizedQuery = query.trim().toLowerCase();
   const maxSessions = Math.max(0, ...spots.map((spot) => spot.sessionsLastWeek));
-  const maxMinutes = Math.max(0, ...spots.map((spot) => spot.totalMinutes));
 
   const filteredSpots = useMemo(() => {
     if (!normalizedQuery) {
@@ -56,29 +46,6 @@ export function SpotExplorer({ spots }: SpotExplorerProps) {
       );
     });
   }, [normalizedQuery, spots]);
-
-  const mappedSpots = useMemo(() => {
-    const coordinateSpots = spots.filter(
-      (spot) => typeof spot.lat === "number" && typeof spot.lng === "number",
-    );
-
-    if (coordinateSpots.length === 0) {
-      return [];
-    }
-
-    const lats = coordinateSpots.map((spot) => spot.lat as number);
-    const lngs = coordinateSpots.map((spot) => spot.lng as number);
-    const minLat = Math.min(...lats);
-    const maxLat = Math.max(...lats);
-    const minLng = Math.min(...lngs);
-    const maxLng = Math.max(...lngs);
-
-    return coordinateSpots.map((spot) => ({
-      ...spot,
-      x: normalize(spot.lng as number, minLng, maxLng),
-      y: 100 - normalize(spot.lat as number, minLat, maxLat),
-    }));
-  }, [spots]);
 
   function selectSpot(id: number) {
     setHighlightedId(id);

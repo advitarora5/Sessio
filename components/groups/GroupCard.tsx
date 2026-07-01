@@ -29,8 +29,8 @@ export function GroupCard({
         <Link href={`/groups/${id}`} className="focus-ring grid gap-4 rounded-lg">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-lg font-semibold">{name}</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <h2 className="text-lg font-semibold text-[#0F223A]">{name}</h2>
+              <p className="mt-1 text-sm text-slate-600">
                 {course ? `${course} · ` : ""}
                 {typeof memberCount === "number"
                   ? `${memberCount} member${memberCount === 1 ? "" : "s"}`
@@ -42,7 +42,9 @@ export function GroupCard({
             </span>
           </div>
           {typeof memberCount !== "number" ? (
-            <p className="text-2xl font-semibold">{formatDuration(focusMinutes)}</p>
+            <p className="text-2xl font-semibold text-[#0F223A]">
+              {formatDuration(focusMinutes)}
+            </p>
           ) : null}
         </Link>
         {inviteCode ? <CopyInviteCodeButton inviteCode={inviteCode} /> : null}

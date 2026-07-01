@@ -1,10 +1,14 @@
 import { SessioLogo } from "@/components/brand/SessioLogo";
 import { HeaderNav, HeaderNavMobile } from "@/components/layout/HeaderNav";
+import {
+  NotificationsBell,
+  type NotificationItem,
+} from "@/components/layout/NotificationsBell";
 import { LogoutButton } from "@/components/logout-button";
 import { UserAvatar } from "@/components/profile/UserAvatar";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
-import { Bell, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
 
@@ -27,6 +31,17 @@ export async function Header({ user }: HeaderProps) {
       .eq("status", "pending"),
   ]);
   const hasPendingFriendRequest = (pendingFriendRequestCount ?? 0) > 0;
+  const notifications: NotificationItem[] = hasPendingFriendRequest
+    ? [
+        {
+          id: "friend-requests",
+          text: `You have ${pendingFriendRequestCount} pending friend request${
+            (pendingFriendRequestCount ?? 0) === 1 ? "" : "s"
+          }.`,
+          href: "/friends",
+        },
+      ]
+    : [];
   const displayName =
     profile?.full_name ??
     user.user_metadata?.full_name ??
@@ -38,11 +53,11 @@ export async function Header({ user }: HeaderProps) {
       <div className="mx-auto w-full max-w-7xl px-4 py-3 md:px-6">
         <div className="flex items-center justify-between gap-4">
           <Link
-            href="/dashboard"
-            aria-label="Sessio dashboard"
+            href="/feed"
+            aria-label="Sessio feed"
             className="focus-ring shrink-0 rounded-lg"
           >
-            <SessioLogo variant="white" tagline="Deep work, mapped." />
+            <SessioLogo variant="white" />
           </Link>
 
           <HeaderNav hasPendingFriendRequest={hasPendingFriendRequest} />
@@ -54,13 +69,7 @@ export async function Header({ user }: HeaderProps) {
                 <span className="hidden sm:inline">Start session</span>
               </Link>
             </Button>
-            <button
-              type="button"
-              aria-label="Notifications"
-              className="focus-ring hidden h-9 w-9 items-center justify-center rounded-full border border-white/15 text-slate-200 transition hover:bg-white/10 hover:text-white sm:inline-flex"
-            >
-              <Bell className="h-4 w-4" />
-            </button>
+            <NotificationsBell items={notifications} />
             <Link
               href="/profile"
               aria-label="Your profile"

@@ -5,15 +5,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export const navItems = [
-  { href: "/dashboard", label: "Dashboard" },
+  { href: "/feed", label: "Feed" },
   { href: "/session/new", label: "Start" },
   { href: "/spots", label: "Spots" },
-  { href: "/heatmap", label: "Heatmap" },
-  { href: "/leaderboard", label: "Leaderboard" },
   { href: "/groups", label: "Groups" },
-  { href: "/calendar", label: "Calendar" },
   { href: "/friends", label: "Friends" },
-  { href: "/feed", label: "Feed" },
+  { href: "/calendar", label: "Calendar" },
+  { href: "/leaderboard", label: "Leaderboard" },
+  { href: "/dashboard", label: "Dashboard" },
 ];
 
 function isActive(pathname: string, href: string) {

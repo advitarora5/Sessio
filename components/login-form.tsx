@@ -40,8 +40,8 @@ export function LoginForm({
         password,
       });
       if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/dashboard");
+      // Feed-first: land signed-in users on the activity feed, not analytics.
+      router.push("/feed");
       router.refresh();
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
@@ -58,7 +58,6 @@ export function LoginForm({
             className="justify-center"
             markClassName="h-16 w-16 rounded-2xl"
             wordmarkClassName="text-2xl"
-            tagline="Deep work, mapped."
             priority
           />
           <CardTitle className="text-2xl">Log in to Sessio</CardTitle>

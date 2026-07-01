@@ -15,7 +15,7 @@ type OnboardingFormProps = {
   profile: Tables<"profiles"> | null;
 };
 
-const roleOptions = ["Student", "Faculty", "Staff", "Grad Student", "Researcher"];
+const rolePresets = ["STUDENT", "ALUM", "STAFF"];
 
 export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
   const router = useRouter();
@@ -23,9 +23,17 @@ export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
   const [username, setUsername] = useState(profile?.username ?? "");
   const [major, setMajor] = useState(profile?.major ?? "");
   const [year, setYear] = useState(profile?.year ?? "");
-  const [role, setRole] = useState(profile?.role ?? "Student");
+  const initialRole = (profile?.role ?? "STUDENT").toUpperCase();
+  const [role, setRole] = useState(initialRole);
+  const [customRole, setCustomRole] = useState(
+    rolePresets.includes(initialRole) ? "" : initialRole,
+  );
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+
+  const effectiveRole = customRole.trim()
+    ? customRole.trim().toUpperCase()
+    : role;
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -39,7 +47,7 @@ export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
       username: username.trim().toLowerCase().replace(/[^a-z0-9_]/g, '') || null,
       major: major.trim() || null,
       year: year.trim() || null,
-      role: role.trim() || null,
+      role: effectiveRole.trim() || null,
       avatar_url: profile?.avatar_url ?? null,
     });
 
@@ -49,7 +57,7 @@ export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
       return;
     }
 
-    router.push("/dashboard");
+    router.push("/feed");
     router.refresh();
   }
 
@@ -114,25 +122,41 @@ export function OnboardingForm({ userId, profile }: OnboardingFormProps) {
             </div>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="onboarding-role">Role</Label>
-            <select
-              id="onboarding-role"
-              value={role}
-              onChange={(event) => setRole(event.target.value)}
-              required
-              className="focus-ring h-10 rounded-md border border-input bg-white px-3 text-sm text-card-foreground"
-            >
-              <option value="">Select role</option>
-              {roleOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
+            <Label>Role</Label>
+            <div className="flex flex-wrap gap-2">
+              {rolePresets.map((option) => {
+                const selected = !customRole.trim() && role === option;
+                return (
+                  <button
+                    key={option}
+                    type="button"
+                    onClick={() => {
+                      setRole(option);
+                      setCustomRole("");
+                    }}
+                    aria-pressed={selected}
+                    className={`focus-ring rounded-full border px-4 py-2 text-sm font-medium transition ${
+                      selected
+                        ? "border-[#0F223A] bg-[#0F223A] text-white"
+                        : "border-input bg-white text-[#0F223A] hover:border-[#0F223A]/40"
+                    }`}
+                  >
+                    {option}
+                  </button>
+                );
+              })}
+            </div>
+            <Input
+              id="onboarding-role-custom"
+              value={customRole}
+              onChange={(event) => setCustomRole(event.target.value)}
+              placeholder="Or type a custom role (e.g. TA, Postdoc)"
+              className="mt-1"
+            />
           </div>
           {error ? <p className="text-sm text-destructive">{error}</p> : null}
           <Button type="submit" size="lg" disabled={isSaving}>
-            {isSaving ? "Saving..." : "Continue to dashboard"}
+            {isSaving ? "Saving..." : "Continue to feed"}
             <ArrowRight className="h-4 w-4" />
           </Button>
         </form>

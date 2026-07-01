@@ -12,10 +12,19 @@ export default async function NewSessionPage({
   const supabase = await createClient();
   const resolvedSearchParams = await searchParams;
 
-  const [{ spots, source: spotsSource }, { data: groups }, { data: recentSessions }] =
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const [{ spots, source: spotsSource }, { data: memberships }, { data: recentSessions }] =
     await Promise.all([
       loadCampusSpots(supabase),
-      supabase.from("groups").select("id, name").order("created_at"),
+      // Only groups the user actually belongs to — starting a group session in
+      // a group you're not a member of violates the sessions INSERT RLS policy.
+      supabase
+        .from("group_members")
+        .select("groups(id, name)")
+        .eq("user_id", user?.id ?? ""),
       supabase
         .from("sessions")
         .select("spot_id, duration_minutes, goal_completed, spots(id, name, area, tags)")
@@ -24,6 +33,15 @@ export default async function NewSessionPage({
         .order("start_time", { ascending: false })
         .limit(50),
     ]);
+
+  const groups = (memberships ?? []).flatMap((membership) => {
+    const g = membership.groups as
+      | { id: number; name: string }
+      | { id: number; name: string }[]
+      | null;
+    if (!g) return [];
+    return Array.isArray(g) ? g : [g];
+  });
 
   const suggestedSpotId = recentSessions
     ?.filter((session) => session.spot_id)

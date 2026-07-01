@@ -160,7 +160,7 @@ export default async function DashboardPage() {
       .or(`user_id.eq.${userId},friend_id.eq.${userId}`),
     supabase
       .from("groups")
-      .select("id, name, invite_code")
+      .select("id, name, course")
       .order("name")
       .limit(6),
     supabase
@@ -369,19 +369,12 @@ export default async function DashboardPage() {
         <section className="grid min-w-0 gap-3">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-[#0F223A]">Activity feed</h2>
-            <div className="flex items-center gap-4">
-              <form action="/api/focus-mode" method="POST">
-                <button type="submit" className="text-sm font-medium bg-[#0F223A] text-white px-4 py-1.5 rounded-full hover:bg-[#0F223A]/90 transition">
-                  Go Deep
-                </button>
-              </form>
-              <Link
-                href="/feed"
-                className="text-sm font-medium text-[#0F223A] underline-offset-4 hover:underline"
-              >
-                View all
-              </Link>
-            </div>
+            <Link
+              href="/feed"
+              className="text-sm font-medium text-[#0F223A] underline-offset-4 hover:underline"
+            >
+              View all
+            </Link>
           </div>
           
           {pendingInvites && pendingInvites.length > 0 && (
@@ -478,9 +471,11 @@ export default async function DashboardPage() {
                     <p className="truncate text-sm font-medium text-[#0F223A]">
                       {group.name}
                     </p>
-                    <p className="truncate text-xs text-muted-foreground">
-                      {group.invite_code}
-                    </p>
+                    {group.course ? (
+                      <p className="truncate text-xs text-muted-foreground">
+                        {group.course}
+                      </p>
+                    ) : null}
                   </div>
                 </Link>
               ))

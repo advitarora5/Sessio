@@ -4,7 +4,10 @@ import { SessioLogo } from "@/components/brand/SessioLogo";
 import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
 
-import { HeaderNav } from "@/components/layout/HeaderNav";
+const marketingNav = [
+  { href: "/", label: "Home" },
+  { href: "/auth/login", label: "Log in" },
+];
 
 const videoSrc =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4";
@@ -40,8 +43,16 @@ export function OpeningHero() {
           <SessioLogo variant="white" wordmarkClassName="text-2xl" />
         </Link>
 
-        <div className="hidden lg:block">
-          <HeaderNav />
+        <div className="hidden items-center gap-1 lg:flex">
+          {marketingNav.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="focus-ring rounded-full px-3.5 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10 hover:text-white"
+            >
+              {item.label}
+            </Link>
+          ))}
         </div>
 
         <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>

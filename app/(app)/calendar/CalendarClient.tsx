@@ -3,13 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Calendar as CalendarIcon, Clock, Plus, Users, ChevronLeft, ChevronRight, Check, X, MapPin } from "lucide-react";
+import { Calendar as CalendarIcon, Plus, ChevronLeft, ChevronRight, Check, X, MapPin } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { 
-  addDays, subDays, addWeeks, subWeeks, addMonths, subMonths, 
+  addWeeks, subWeeks, addMonths, subMonths, 
   startOfWeek, endOfWeek, startOfMonth, endOfMonth, eachDayOfInterval, 
-  isSameMonth, isSameDay, format, parseISO
+  isSameMonth, isSameDay, format
 } from "date-fns";
 
 export type CalendarEvent = {
@@ -25,13 +25,49 @@ export type CalendarEvent = {
   inviter_username?: string;
 };
 
+export type PendingInvite = {
+  id: number;
+  event_id?: number;
+  status?: string;
+  calendar_events: {
+    id?: number;
+    title: string;
+    start_time: string;
+    end_time: string;
+    location: string | null;
+    user_id?: string;
+    profiles?: { full_name: string | null; username: string | null } | null;
+  };
+};
+
+function pendingInviteToEvent(
+  invite: PendingInvite,
+  markPending: boolean,
+): CalendarEvent {
+  const ce = invite.calendar_events;
+  return {
+    id: String(ce.id ?? invite.id),
+    title: ce.title,
+    start_time: ce.start_time,
+    end_time: ce.end_time,
+    location: ce.location ?? undefined,
+    ...(markPending
+      ? {
+          is_pending_invite: true,
+          rsvp_id: String(invite.id),
+          inviter_username: ce.profiles?.username ?? undefined,
+        }
+      : {}),
+  };
+}
+
 type CalendarClientProps = {
   initialEvents: CalendarEvent[];
   userId: string;
   friends?: { id: string; username: string; full_name: string }[];
   groups?: { id: string; name: string }[];
   spots?: { id: number; name: string; building: string }[];
-  pendingInvites?: any[];
+  pendingInvites?: PendingInvite[];
 };
 
 export function CalendarClient({ 
@@ -146,12 +182,12 @@ export function CalendarClient({
       });
       if (res.ok) {
         // Remove from pending
-        const acceptedInvite = invites.find(i => i.id === rsvpId);
-        setInvites(prev => prev.filter(i => i.id !== rsvpId));
+        const acceptedInvite = invites.find(i => String(i.id) === rsvpId);
+        setInvites(prev => prev.filter(i => String(i.id) !== rsvpId));
         
         // If accepted, add to our local events state so it shows up immediately
         if (status === "accepted" && acceptedInvite && acceptedInvite.calendar_events) {
-          setEvents(prev => [...prev, acceptedInvite.calendar_events]);
+          setEvents(prev => [...prev, pendingInviteToEvent(acceptedInvite, false)]);
           showToast("Invite accepted!");
         } else if (status === "declined") {
           showToast("Invite declined.");
@@ -177,12 +213,7 @@ export function CalendarClient({
   };
 
   // Merge regular events with pending invites for the grid
-  const pendingGridEvents = invites.map(invite => ({
-    ...invite.calendar_events,
-    is_pending_invite: true,
-    rsvp_id: invite.id,
-    inviter_username: invite.calendar_events.profiles?.username
-  }));
+  const pendingGridEvents = invites.map((invite) => pendingInviteToEvent(invite, true));
   const allGridEvents = [...events, ...pendingGridEvents];
 
   // Views Logic
@@ -244,10 +275,10 @@ export function CalendarClient({
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button size="sm" variant="outline" className="h-8 border-amber-300 text-amber-700 hover:bg-amber-100" onClick={() => handleRSVP(invite.id, "declined")}>
+                    <Button size="sm" variant="outline" className="h-8 border-amber-300 text-amber-700 hover:bg-amber-100" onClick={() => handleRSVP(String(invite.id), "declined")}>
                       <X className="h-4 w-4" />
                     </Button>
-                    <Button size="sm" className="h-8 bg-amber-600 hover:bg-amber-700 text-white" onClick={() => handleRSVP(invite.id, "accepted")}>
+                    <Button size="sm" className="h-8 bg-amber-600 hover:bg-amber-700 text-white" onClick={() => handleRSVP(String(invite.id), "accepted")}>
                       <Check className="h-4 w-4 mr-1" /> Accept
                     </Button>
                   </div>
@@ -402,7 +433,7 @@ export function CalendarClient({
               </div>
               {/* Month Grid */}
               <div className="flex-1 grid grid-cols-7 grid-rows-5 lg:grid-rows-6">
-                {monthDays.map((day, i) => {
+                {monthDays.map((day) => {
                   const dayEvents = allGridEvents.filter(e => isSameDay(new Date(e.start_time), day));
                   const isCurrentMonth = isSameMonth(day, currentDate);
                   return (

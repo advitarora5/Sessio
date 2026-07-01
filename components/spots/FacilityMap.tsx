@@ -280,7 +280,7 @@ export default function FacilityMap({
           },
         }));
 
-      const geojson: any = {
+      const geojson: GeoJSON.FeatureCollection = {
         type: "FeatureCollection",
         features,
       };
@@ -290,7 +290,7 @@ export default function FacilityMap({
         | undefined;
 
       if (existingSource) {
-        existingSource.setData(geojson as any);
+        existingSource.setData(geojson);
       } else {
         mapRef.addSource(sourceId, { type: "geojson", data: geojson });
 
@@ -298,7 +298,7 @@ export default function FacilityMap({
         const firstTextLayer = mapRef
           .getStyle()
           .layers?.find(
-            (l: any) => l.type === "symbol" && l.layout && l.layout["text-field"]
+            (l) => l.type === "symbol" && !!l.layout?.["text-field"]
           );
 
         mapRef.addLayer(
@@ -337,7 +337,7 @@ export default function FacilityMap({
         );
 
         // Interactive hover and click for building labels
-        mapRef.on("mouseenter", layerId, (e: any) => {
+        mapRef.on("mouseenter", layerId, (e: mapboxgl.MapLayerMouseEvent) => {
           mapRef.getCanvas().style.cursor = "pointer";
           const feature = e.features && e.features[0];
           if (!feature) return;
@@ -363,7 +363,7 @@ export default function FacilityMap({
           activePopupRef.current = null;
         });
 
-        mapRef.on("click", layerId, (e: any) => {
+        mapRef.on("click", layerId, (e: mapboxgl.MapLayerMouseEvent) => {
           const feature = e.features && e.features[0];
           if (!feature) return;
 

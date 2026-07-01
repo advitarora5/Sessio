@@ -80,8 +80,9 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ event: newEvent });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Manual Schedule error:", err);
-    return NextResponse.json({ error: err.message || "Failed to schedule event" }, { status: 500 });
+    const message = err instanceof Error ? err.message : "Failed to schedule event";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -41,7 +41,7 @@ export function SessionCard({
   action,
 }: SessionCardProps) {
   const actorBlock = actorName ? (
-    <div className="mb-1 flex items-center gap-2 text-sm text-muted-foreground">
+    <div className="mb-1 flex items-center gap-2 text-sm font-medium text-[#0F223A]">
       <UserAvatar
         name={actorName}
         username={actorUsername}
@@ -63,7 +63,7 @@ export function SessionCard({
             ) : (
               actorBlock
             )}
-            <h3 className="mt-1 text-lg font-semibold">{title}</h3>
+            <h3 className="mt-1 text-lg font-semibold text-[#0F223A]">{title}</h3>
           </div>
           {action}
         </div>
@@ -79,7 +79,7 @@ export function SessionCard({
           {distractionFree ? <Badge variant="outline">DND</Badge> : null}
         </div>
 
-        <div className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-3">
+        <div className="grid gap-2 text-sm text-slate-600 sm:grid-cols-3">
           <span className="flex items-center gap-2">
             <Clock3 className="h-4 w-4 text-primary" />
             {formatDuration(durationMinutes)}
@@ -96,7 +96,7 @@ export function SessionCard({
         </div>
 
         {summary ? (
-          <p className="rounded-lg border border-primary/20 bg-primary/10 p-3 text-sm text-foreground">
+          <p className="rounded-lg border border-primary/20 bg-primary/10 p-3 text-sm text-[#0F223A]">
             <Sparkles className="mr-2 inline h-4 w-4 text-primary" />
             {summary}
           </p>
@@ -108,8 +108,8 @@ export function SessionCard({
               <video
                 src={mediaUrl}
                 controls
-                className="w-full"
-                style={{ maxHeight: '500px' }}
+                className="w-full object-cover"
+                style={{ maxHeight: '260px' }}
               >
                 Your browser does not support the video tag.
               </video>
@@ -118,14 +118,14 @@ export function SessionCard({
                 src={mediaUrl}
                 alt="Session media"
                 className="w-full object-cover"
-                style={{ maxHeight: '500px' }}
+                style={{ maxHeight: '260px' }}
               />
             )}
           </div>
         ) : null}
 
         {typeof goldStarsCount === "number" ? (
-          <p className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+          <p className="inline-flex items-center gap-1 text-sm text-slate-600">
             <Star className="h-4 w-4 fill-amber-400 text-amber-500" />
             {goldStarsCount} {goldStarsCount === 1 ? "gold star" : "gold stars"}
           </p>

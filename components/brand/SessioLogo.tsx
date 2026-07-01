@@ -7,6 +7,10 @@ type SessioLogoProps = {
   className?: string;
   markClassName?: string;
   wordmarkClassName?: string;
+  /**
+   * @deprecated Tagline is no longer rendered. These props are accepted as
+   * no-ops so existing call sites keep compiling while we remove them.
+   */
   taglineClassName?: string;
   tagline?: string;
   /**
@@ -23,8 +27,6 @@ export function SessioLogo({
   className,
   markClassName,
   wordmarkClassName,
-  taglineClassName,
-  tagline,
   variant = "navy",
   showWordmark = true,
 }: SessioLogoProps) {
@@ -57,17 +59,6 @@ export function SessioLogo({
           >
             Sessio
           </span>
-          {tagline ? (
-            <span
-              className={cn(
-                "mt-1 hidden text-xs sm:block",
-                isWhite ? "text-slate-300" : "text-muted-foreground",
-                taglineClassName,
-              )}
-            >
-              {tagline}
-            </span>
-          ) : null}
         </span>
       ) : null}
     </span>

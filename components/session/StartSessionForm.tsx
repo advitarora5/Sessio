@@ -40,8 +40,10 @@ export function StartSessionForm({
   const [targetDuration, setTargetDuration] = useState(45);
   const [customDuration, setCustomDuration] = useState("");
   const [spotId, setSpotId] = useState(initialSpotId?.toString() ?? "");
+  // Private by default — a private session always passes the sessions INSERT
+  // RLS policy since it isn't tied to a group the user may not belong to.
   const [visibility, setVisibility] =
-    useState<Tables<"sessions">["visibility"]>("group");
+    useState<Tables<"sessions">["visibility"]>("private");
   const [distractionFree, setDistractionFree] = useState(true);
   const [groupId, setGroupId] = useState(groups[0]?.id.toString() ?? "");
   const [notes, setNotes] = useState("");
@@ -127,8 +129,8 @@ export function StartSessionForm({
                   onClick={() => setCategory(item)}
                   className={`focus-ring rounded-full border px-3 py-2 text-sm transition ${
                     category === item
-                      ? "border-primary bg-primary text-primary-foreground"
-                      : "border-border bg-muted/40 text-muted-foreground hover:text-foreground"
+                      ? "border-[#0F223A] bg-[#0F223A] text-white"
+                      : "border-border bg-white text-[#0F223A] hover:border-[#0F223A]/40 hover:bg-slate-50"
                   }`}
                 >
                   {item}
@@ -147,8 +149,8 @@ export function StartSessionForm({
                   onClick={() => setTargetDuration(minutes)}
                   className={`focus-ring rounded-lg border px-3 py-3 text-sm font-semibold transition ${
                     targetDuration === minutes
-                      ? "border-primary bg-primary text-primary-foreground"
-                      : "border-border bg-muted/40 hover:text-primary"
+                      ? "border-[#0F223A] bg-[#0F223A] text-white"
+                      : "border-border bg-white text-[#0F223A] hover:border-[#0F223A]/40 hover:bg-slate-50"
                   }`}
                 >
                   {minutes}m
@@ -222,7 +224,7 @@ export function StartSessionForm({
             </select>
           </div>
 
-          <label className="flex items-start gap-3 rounded-lg border border-border bg-muted/20 p-4 text-sm">
+          <label className="flex items-start gap-3 rounded-lg border border-border bg-white p-4 text-sm">
             <Checkbox
               checked={distractionFree}
               onCheckedChange={(checked) => setDistractionFree(checked === true)}
@@ -230,10 +232,10 @@ export function StartSessionForm({
               className="mt-0.5"
             />
             <span>
-              <span className="block font-medium text-foreground">
+              <span className="block font-medium text-[#0F223A]">
                 Distraction-free mode
               </span>
-              <span className="mt-1 block text-muted-foreground">
+              <span className="mt-1 block text-slate-600">
                 Adds a DND tag to the completed session.
               </span>
             </span>

@@ -7,12 +7,14 @@ export default async function FeedPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // No visibility filter: RLS already scopes this to the viewer's own sessions
+  // plus everything they're allowed to see (public + their groups), so the
+  // feed leads with friends/campus activity and the viewer's latest blocks.
   const { data: sessions } = await supabase
     .from("sessions")
     .select(
       "id, user_id, title, category, start_time, duration_minutes, distraction_free, goal_completed, summary_ai, media_url, spots(name), likes(id, user_id)",
     )
-    .eq("visibility", "public")
     .eq("status", "completed")
     .order("start_time", { ascending: false })
     .limit(30);
@@ -53,9 +55,11 @@ export default async function FeedPage() {
     <div className="grid gap-6">
       <div>
         <p className="text-sm font-medium text-primary">Activity feed</p>
-        <h1 className="mt-2 text-3xl font-semibold">Public sessions</h1>
-        <p className="mt-2 text-muted-foreground">
-          Recent public focus blocks from the Sessio campus graph.
+        <h1 className="mt-2 text-3xl font-semibold text-[#0F223A]">
+          What campus is studying
+        </h1>
+        <p className="mt-2 text-slate-600">
+          Your latest focus blocks and recent sessions from friends and groups.
         </p>
       </div>
       {user ? <GroupFeed sessions={feedSessions} currentUserId={user.id} /> : null}

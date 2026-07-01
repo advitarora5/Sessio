@@ -10,12 +10,12 @@ import {
 import Link from "next/link";
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
+  { href: "/feed", label: "Feed", icon: Radio },
   { href: "/session/new", label: "Start", icon: Flame },
   { href: "/spots", label: "Spots", icon: MapPinned },
   { href: "/groups", label: "Groups", icon: Users },
   { href: "/friends", label: "Friends", icon: UsersRound },
-  { href: "/feed", label: "Feed", icon: Radio },
+  { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
   { href: "/profile", label: "Profile", icon: Compass },
 ];
 
